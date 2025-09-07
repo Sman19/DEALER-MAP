@@ -1,0 +1,17 @@
+DEALER MAP
+function addPoint(lat, lng, name, state='', code='', phone='') {
+  const m = L.circleMarker([lat, lng], {
+    radius: 5,
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.85
+  }).bindPopup(`
+    <div class="tooltip-title">${name}</div>
+    <div><b>State:</b> ${state}</div>
+    <div><b>Dealer Code:</b> ${code}</div>
+    <div><b>Phone:</b> ${phone}</div>
+  `);
+  m.dealerName = name.toLowerCase();
+  allMarkers.push(m);
+  bounds.extend([lat, lng]);
+}
