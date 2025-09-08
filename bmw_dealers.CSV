@@ -1,10 +1,8 @@
 raw = r"""BMW Dealers in the United States
 AK
-Bmw Of Anchorage - Dealer Code: 28786, Phone: (877) 583-5028
-AL
-Bmw Of Montgomery - Dealer Code: 29187, Phone: (800) 996-9705
-Bmw Of Birmingham Ccrc - Dealer Code: 21851, Phone: (866) 655-1204
-Bmw Of Birmingham - Dealer Code: 21851, Phone: (205) 252-9512
+Bmw Of Anchorage,AK,28786,(877) 583-5028,61.1509,-149.8679
+Bmw Of Montgomery,AL,29187,(800) 996-9705,<lat>,<lng>
+Bmw Of Birmingham,AL,21851,(866) 655-1204,<lat>,<lng>
 Century Bmw Ccrc - Dealer Code: 86773, Phone: (256) 713-0183
 Century Bmw - Dealer Code: 86773, Phone: (256) 536-3800
 Bmw Of Tuscaloosa - Dealer Code: 44780, Phone: (205) 345-9811
