@@ -2,20 +2,20 @@ name,state,dealer_code,phone,lat,lng,url
 Bmw Of Anchorage,AK,28786,(877) 583-5028,61.1509,-149.8679,https://www.bmwofanchorage.com
 BMW of Montgomery,AL,29187,(800) 996-9705,32.366806,-86.299969,https://www.bmwofmontgomery.com/
 BMW of Birmingham,AL,21851,(866) 655-1204,33.518589,-86.810356,https://www.birminghambmw.com/
-Century BMW,AL,86773,(256) 536-3800,34.738228,-86.601791
-BMW of Tuscaloosa,AL,44780,(205) 345-9811,33.169079,-87.490982
-BMW of Mobile,AL,34537,(251) 476-2550,30.695366,-88.039894
-BMW of Little Rock,AR,44821,(501) 224-3200,34.744461,-92.411285
-BMW of Northwest Arkansas,AR,31833,(888) 571-7341,36.306110,-94.180199
-BMW Tucson,AZ,32082,(520) 549-2167,32.131981,-110.955528
-Chapman BMW,AZ,10729,(480) 344-4269,33.430981,-111.939392
-Chapman BMW On Camelback,AZ,10729,(602) 308-4269,33.508598,-112.043877
-Arrowhead BMW,AZ,46886,(833) 700-1269,33.665199,-112.186829
-BMW North Scottsdale,AZ,20741,(877) 705-3224,33.640869,-111.926041
-Irvine BMW,CA,21188,(949) 649-8787,33.662874,-117.749196
-BMW of Ontario,CA,34821,(909) 390-7888,34.060770,-117.552176
-BMW of Riverside,CA,40335,(951) 373-5000,33.948207,-117.396355
-BMW Encinitas,CA,30956,(760) 753-6301,33.053174,-117.262601
+Century BMW,AL,86773,(256) 536-3800,34.738228,-86.601791,https://www.century-bmw.com/
+BMW of Tuscaloosa,AL,44780,(205) 345-9811,33.169079,-87.490982,https://www.bmwoftuscaloosa.com/
+BMW of Mobile,AL,34537,(251) 476-2550,30.695366,-88.039894,https://www.bmwofmobile.com/
+BMW of Little Rock,AR,44821,(501) 224-3200,34.744461,-92.411285,https://www.bmwoflittlerock.com/
+BMW of Northwest Arkansas,AR,31833,(888) 571-7341,36.306110,-94.180199,https://www.bmwofnwa.com/
+BMW Tucson,AZ,32082,(520) 549-2167,32.131981,-110.955528,https://www.bmwoftucson.com/
+Chapman BMW Chandler,AZ,10729,(480) 344-4269,33.430981,-111.939392,https://www.chapmanbmwchandler.com/
+Chapman BMW On Camelback,AZ,10729,(602) 308-4269,33.508598,-112.043877,https://www.chapmanbmwoncamelback.com/
+Arrowhead BMW,AZ,46886,(833) 700-1269,33.665199,-112.186829,https://www.arrowheadbmw.com/
+BMW North Scottsdale,AZ,20741,(877) 705-3224,33.640869,-111.926041,https://www.bmwnorthscottsdale.com/
+Irvine BMW,CA,21188,(949) 649-8787,33.662874,-117.749196,https://www.irvinebmw.com/
+BMW of Ontario,CA,34821,(909) 390-7888,34.060770,-117.552176,https://www.bmwofontario.com/
+BMW of Riverside,CA,40335,(951) 373-5000,33.948207,-117.396355,https://www.bmwofriverside.com/
+BMW Encinitas,CA,30956,(760) 753-6301,33.053174,-117.262601,https://www.autonation.com/
 BMW of Vista,CA,44610,(760) 305-5770,33.179291,-117.239685
 BMW of San Diego,CA,24335,(858) 560-5050,32.824873,-117.155638
 BMW of Murrieta,CA,35744,(951) 249-8000,33.561991,-117.174239
