@@ -1,61 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BMW Dealers — US + Puerto Rico</title>
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-
-  <style>
-    html, body { height: 100%; margin: 0; }
-    #map { height: 100vh; width: 100vw; }
-    .controls {
-      position: absolute; top: 12px; left: 12px; z-index: 1000;
-      background: #fff; padding: 8px 10px; border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15); display: flex; gap: 8px; align-items: center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    }
-    .controls input { padding: 6px 8px; border-radius: 8px; border: 1px solid #ddd; width: 260px; }
-    .controls button { padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; background: #f6f6f6; }
-    .legend {
-      position: absolute; bottom: 12px; left: 12px; z-index: 1000;
-      background: #fff; padding: 8px 10px; border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15); font-size: 13px; line-height: 1.35;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    }
-    .tooltip-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
-    .count { font-weight: 600; }
-  </style>
-</head>
-<body>
-  <div id="map"></div>
-
-  <div class="controls">
-    <input id="search" type="text" placeholder="Search dealer / state / phone…" />
-    <button id="resetBtn" title="Reset view">Reset</button>
-    <span id="shownCount"></span>
-  </div>
-
-  <div class="legend">
-    <div><span class="count" id="totalCount">0</span> BMW dealers loaded</div>
-    <div>• Click a dot to see details</div>
-    <div>• Data file: <code>bmw_dealers.CSV</code></div>
-  </div>
-
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
-
   <!-- Papa Parse (CSV parser) -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
@@ -113,106 +55,35 @@
       }
     }
 
-    // Load CSV (headers: name,state,dealer_code,phone,lat,lng)
-    <script>
-// ---- client-side geocoding helper ----
-const GEOCODE_CACHE_KEY = 'bmw_geocode_cache_v1';
-let geoCache = {};
-try { geoCache = JSON.parse(localStorage.getItem(GEOCODE_CACHE_KEY) || '{}'); } catch { geoCache = {}; }
-const saveCache = () => localStorage.setItem(GEOCODE_CACHE_KEY, JSON.stringify(geoCache));
+    // --- Papa Parse CSV Loader ---
+    Papa.parse("bmw_dealers.CSV", {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        results.data.forEach(function(r) {
+          const name  = (r.name || '').trim();
+          const state = (r.state || '').trim();
+          const code  = (r.dealer_code || '').trim();
+          const phone = (r.phone || '').trim();
+          const lat   = parseFloat(r.lat);
+          const lng   = parseFloat(r.lng);
 
-async function geocodeDealer(name, state) {
-  const query = `${name}, ${state}, USA`;
-  if (geoCache[query] !== undefined) return geoCache[query];
+          if (name && !isNaN(lat) && !isNaN(lng)) {
+            addPoint(lat, lng, name, state, code, phone);
+          }
+        });
 
-  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=us&q=${encodeURIComponent(query)}`;
-  const resp = await fetch(url, { headers: { 'Accept': 'application/json' }});
-  if (!resp.ok) { geoCache[query] = null; saveCache(); return null; }
-
-  const data = await resp.json();
-  if (Array.isArray(data) && data[0]) {
-    const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-    geoCache[query] = coords; saveCache();
-    return coords;
-  }
-  geoCache[query] = null; saveCache();
-  return null;
-}
-
-// polite delay between geocoding calls
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
-// keep a copy of enriched rows so you can download a finished CSV
-const enrichedRows = [];
-
-// ===== REPLACE your Papa.parse block with everything below =====
-Papa.parse('bmw_dealers.CSV', {
-  download: true,
-  header: true,
-  skipEmptyLines: true,
-  complete: async function(results) {
-    const rows = results.data;
-
-    for (const r of rows) {
-      const name  = (r.name || '').trim();
-      const state = (r.state || '').trim();
-      const code  = (r.dealer_code || '').trim();
-      const phone = (r.phone || '').trim();
-
-      let lat = parseFloat(r.lat);
-      let lng = parseFloat(r.lng);
-
-      // if lat/lng are missing or invalid, try to geocode
-      if (!name) continue;
-      if (isNaN(lat) || isNaN(lng)) {
-        const coords = await geocodeDealer(name, state);
-        if (!coords) { 
-          // couldn't geocode — skip plotting but keep for CSV output
-          enrichedRows.push({name, state, dealer_code: code, phone, lat: '', lng: ''});
-          // be polite to the free service
-          await sleep(1200);
-          continue;
-        }
-        lat = coords.lat; lng = coords.lng;
-        // be polite to the free service
-        await sleep(1200);
+        renderMarkers();
+        if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
       }
+    });
 
-      // plot & record
-      addPoint(lat, lng, name, state, code, phone);
-      enrichedRows.push({name, state, dealer_code: code, phone, lat, lng});
+    // --- Search & Reset ---
+    searchInput.addEventListener('input', e => renderMarkers(e.target.value));
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      searchInput.value = '';
       renderMarkers();
-    }
-
-    // zoom to markers if we have any
-    if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
-
-    // optional: offer a download of the enriched CSV
-    offerCsvDownload(enrichedRows, 'bmw_dealers_geocoded.csv');
-  }
-});
-
-// helper to download a CSV of enriched data
-function offerCsvDownload(rows, filename) {
-  if (!rows.length) return;
-  const headers = ['name','state','dealer_code','phone','lat','lng'];
-  const csv = [headers.join(',')]
-    .concat(rows.map(r => headers.map(h => {
-      const v = r[h] ?? '';
-      // simple CSV escaping
-      return /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g,'""')}"` : v;
-    }).join(',')))
-    .join('\n');
-
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv'}));
-  a.download = filename;
-  a.textContent = 'Download geocoded CSV';
-  a.style.position = 'absolute';
-  a.style.right = '12px';
-  a.style.bottom = '12px';
-  a.style.zIndex = 1000;
-  a.className = 'leaflet-control';
-  document.body.appendChild(a);
-}
-</script>
+      if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+    });
+  </script>
