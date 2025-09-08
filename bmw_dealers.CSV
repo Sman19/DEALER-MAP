@@ -1,21 +1,548 @@
-// Load CSV: expected headers: name,state,dealer_code,phone,lat,lng
-Papa.parse('BMW_DEALERS.CSV', {
-  download: true,
-  header: true,
-  skipEmptyLines: true,
-  complete: function(results) {
-    const rows = results.data;
-    rows.forEach(r => {
-      const name = r.name || '';
-      const state = r.state || '';
-      const code = r.dealer_code || '';
-      const phone = r.phone || '';
-      const lat = parseFloat(r.lat);
-      const lng = parseFloat(r.lng);
-      if (!name || isNaN(lat) || isNaN(lng)) return;
-      addPoint(lat, lng, name, state, code, phone);
-    });
-    renderMarkers();
-    map.fitBounds(bounds.pad(0.2));
-  }
-});
+raw = r"""BMW Dealers in the United States
+AK
+Bmw Of Anchorage - Dealer Code: 28786, Phone: (877) 583-5028
+AL
+Bmw Of Montgomery - Dealer Code: 29187, Phone: (800) 996-9705
+Bmw Of Birmingham Ccrc - Dealer Code: 21851, Phone: (866) 655-1204
+Bmw Of Birmingham - Dealer Code: 21851, Phone: (205) 252-9512
+Century Bmw Ccrc - Dealer Code: 86773, Phone: (256) 713-0183
+Century Bmw - Dealer Code: 86773, Phone: (256) 536-3800
+Bmw Of Tuscaloosa - Dealer Code: 44780, Phone: (205) 345-9811
+Bmw Of Mobile Ccrc - Dealer Code: 34537, Phone: (866) 520-4797
+Bmw Of Mobile - Dealer Code: 34537, Phone: (251) 476-2550
+AR
+Bmw Of Little Rock - Dealer Code: 44821, Phone: (501) 224-3200
+Bmw Of Northwest Arkansas Ccrc - Dealer Code: 31833, Phone: (866) 513-2525
+Bmw Of Northwest Arkansas - Dealer Code: 31833, Phone: (888) 571-7341
+AZ
+Bmw Tucson - Dealer Code: 32082, Phone: (520) 549-2167
+Chapman Bmw - Dealer Code: 10729, Phone: (480) 344-4269
+Chapman Bmw Ccrc - Dealer Code: 10729, Phone: (480) 949-8959
+Chapman Bmw On Camelback - Dealer Code: 10729, Phone: (602) 308-4269
+Arrowhead Bmw - Dealer Code: 46886, Phone: (833) 700-1269
+Bmw North Scottsdale - Dealer Code: 20741, Phone: (877) 705-3224
+CA
+Irvine Bmw - Dealer Code: 21188, Phone: (949) 649-8787
+Bmw Of Ontario - Dealer Code: 34821, Phone: (909) 390-7888
+Bmw Of Riverside - Dealer Code: 40335, Phone: (951) 373-5000
+Bmw Encinitas - Dealer Code: 30956, Phone: (760) 753-6301
+Bmw Of Vista - Dealer Code: 44610, Phone: (760) 305-5770
+Bmw Of San Diego Ccrc - Dealer Code: 24335, Phone: (858) 560-5050
+Bmw Of San Diego - Dealer Code: 24335, Phone: (858) 560-5050
+Bmw Of Murrieta - Dealer Code: 35744, Phone: (951) 249-8000
+Bmw Of Escondido Ccrc - Dealer Code: 51458, Phone: (760) 745-3000
+Bmw Of Escondido - Dealer Code: 51458, Phone: (760) 745-3000
+Bmw Of El Cajon - Dealer Code: 32467, Phone: (619) 442-8888
+Bmw Of Palm Springs - Dealer Code: 44427, Phone: (760) 324-7071
+Bmw Of Humboldt Bay - Dealer Code: 29869, Phone: (707) 839-4269
+Bmw Of Visalia - Dealer Code: 86335, Phone: (559) 732-4700
+Bmw Concord Ccrc - Dealer Code: 4497, Phone: (925) 682-3577
+Bmw Concord - Dealer Code: 4497, Phone: (925) 682-3577
+Hansel Bmw Of Santa Rosa - Dealer Code: 23779, Phone: (707) 578-4717
+Hansel Bmw Of Santa Rosa Ccrc - Dealer Code: 23779, Phone: (707) 545-6602
+Valley Bmw - Dealer Code: 21616, Phone: (209) 575-0269
+Niello Bmw Elk Grove - Dealer Code: 4618, Phone: (916) 687-9000
+Crevier Bmw - Dealer Code: 36721, Phone: (657) 231-5040
+Niello Bmw Sacramento - Dealer Code: 4618, Phone: (916) 486-1011
+Bmw Of Roseville - Dealer Code: 4923, Phone: (916) 790-1990
+Bmw Of Chico - Dealer Code: 42367, Phone: (530) 893-1300
+Bmw Fresno - Dealer Code: 39315, Phone: (559) 447-6700
+Sterling Bmw - Dealer Code: 86513, Phone: (949) 645-5900
+Bmw Of Fairfield - Dealer Code: 47859, Phone: (707) 402-1599
+Bmw Of Monrovia - Dealer Code: 31642, Phone: (626) 358-4269
+Valencia Bmw - Dealer Code: 22180, Phone: (661) 254-8000
+Bob Smith Bmw - Dealer Code: 4637, Phone: (818) 346-3144
+Rusnak Bmw - Dealer Code: 86846, Phone: (805) 496-6500
+Steve Thomas Bmw - Dealer Code: 17990, Phone: (805) 482-8878
+Bmw Of Bakersfield - Dealer Code: 24781, Phone: (661) 396-4040
+Bmw Santa Barbara - Dealer Code: 26718, Phone: (805) 682-2000
+Bmw Of Santa Maria - Dealer Code: 65734, Phone: (805) 614-0306
+Bmw Of San Luis Obispo - Dealer Code: 22820, Phone: (805) 543-4423
+Santa Monica Bmw - Dealer Code: 4660, Phone: (310) 829-3535
+Bmw Of San Francisco Ccrc - Dealer Code: 49544, Phone: (415) 551-2639
+East Bay Bmw - Dealer Code: 10731, Phone: (888) 593-7018
+Bmw Of Buena Park - Dealer Code: 47046, Phone: (714) 598-3738
+Bmw Of Fremont - Dealer Code: 24856, Phone: (510) 224-4820
+Bmw Of Mountain View - Dealer Code: 21618, Phone: (650) 943-1000
+Peter Pan Bmw - Dealer Code: 32652, Phone: (650) 349-9077
+Weatherford Bmw Ccrc - Dealer Code: 4514, Phone: (510) 271-8044
+Weatherford Bmw - Dealer Code: 4514, Phone: (510) 654-8280
+Bmw Of San Rafael - Dealer Code: 42869, Phone: (415) 482-2000
+Stevens Creek Bmw - Dealer Code: 22083, Phone: (408) 249-9070
+Bmw Of Sherman Oaks - Dealer Code: 47724, Phone: (818) 907-9995
+Bmw Of Monterey - Dealer Code: 30822, Phone: (866) 299-5459
+Century West Bmw - Dealer Code: 20268, Phone: (818) 432-5800
+Mckenna Bmw - Dealer Code: 96733, Phone: (562) 868-3233
+Mckenna Bmw Ccrc - Dealer Code: 96733, Phone: (562) 345-7000
+New Century Bmw - Dealer Code: 17966, Phone: (626) 570-8444
+Long Beach Bmw - Dealer Code: 31643, Phone: (562) 427-5494
+New Century Bmw Ccrc - Dealer Code: 17966, Phone: (626) 282-2233
+Nick Alexander Imports Ccrc - Dealer Code: 4942, Phone: (323) 583-1901
+Nick Alexander Imports - Dealer Code: 4942, Phone: (323) 583-1901
+Bmw Of San Francisco - Dealer Code: 49544, Phone: (628) 221-7930
+Beverly Hills Bmw - Dealer Code: 21390, Phone: (310) 358-7800
+Pacific Bmw - Dealer Code: 76837, Phone: (818) 246-5600
+South Bay Bmw - Dealer Code: 41903, Phone: (310) 939-7300
+Pacific Bmw Ccrc - Dealer Code: 76837, Phone: (818) 698-8276
+CO
+Winslow Bmw Of Colorado Springs - Dealer Code: 16418, Phone: (719) 473-1373
+Schomp Bmw Of Highlands Ranch - Dealer Code: 5042, Phone: (303) 471-3772
+Bmw Of Denver Downtown Ccrc - Dealer Code: 39314, Phone: (303) 243-3001
+Bmw Of Denver Downtown - Dealer Code: 39314, Phone: (303) 759-4646
+Gebhardt Bmw - Dealer Code: 5080, Phone: (720) 974-1000
+Bmw Of Loveland - Dealer Code: 50070, Phone: (970) 292-5200
+CT
+Bmw Of North Haven - Dealer Code: 59127, Phone: (203) 239-7272
+Bmw Of New London - Dealer Code: 36582, Phone: (860) 447-3141
+New Country Bmw - Dealer Code: 20173, Phone: (860) 522-6134
+Continental Bmw Of Darien - Dealer Code: 23200, Phone: (203) 656-1804
+Bmw Of Waterbury - Dealer Code: 43039, Phone: (860) 274-7515
+Bmw Of Ridgefield - Dealer Code: 51085, Phone: (203) 438-0471
+Bmw Of Bridgeport - Dealer Code: 24618, Phone: (203) 334-1672
+Bmw Of Greenwich - Dealer Code: 40808, Phone: (203) 413-1900
+DE
+Union Park Bmw - Dealer Code: 81000, Phone: (302) 658-7245
+I. G. Burton Bmw - Dealer Code: 36493, Phone: (302) 424-3042
+FL
+Tom Bush Bmw Orange Park - Dealer Code: 46778, Phone: (904) 777-2500
+Bert Smith International - Dealer Code: 93777, Phone: (727) 527-1111
+Ferman Bmw - Dealer Code: 49134, Phone: (727) 785-3900
+Bmw Of Tampa - Dealer Code: 50929, Phone: (813) 936-5500
+Fields Bmw - Lakeland - Dealer Code: 10736, Phone: (863) 816-1234
+Bmw Of Ocala - Dealer Code: 47727, Phone: (352) 861-0234
+Melbourne Bmw - Dealer Code: 48600, Phone: (321) 727-3788
+Fields Bmw South Orlando - Dealer Code: 96255, Phone: (407) 956-6300
+Fields Bmw - Dealer Code: 96255, Phone: (407) 628-2100
+Fields Bmw Ccrc - Dealer Code: 96255, Phone: (888) 553-1773
+Capital Bmw - Dealer Code: 20412, Phone: (866) 203-6076
+Fields Bmw Of Daytona - Dealer Code: 29867, Phone: (386) 274-1200
+Bmw Of Gainesville - Dealer Code: 34748, Phone: (352) 376-4551
+Bmw Of Wesley Chapel - Dealer Code: 36637, Phone: (813) 907-3600
+Fields Bmw Of Daytona Ccrc - Dealer Code: 29867, Phone: (386) 872-3612
+South Motors Bmw - Dealer Code: 96603, Phone: (305) 256-2200
+Bmw Of Sarasota - Dealer Code: 32147, Phone: (941) 923-2700
+Tom Bush Bmw Jacksonville - Dealer Code: 46778, Phone: (904) 725-0911
+South Motors Bmw Ccrc - Dealer Code: 96603, Phone: (305) 256-6590
+Braman Bmw - Dealer Code: 20626, Phone: (305) 571-1200
+Braman Bmw Ccrc - Dealer Code: 20626, Phone: (305) 571-1240
+Lauderdale Bmw Of Pembroke Pines - Dealer Code: 75784, Phone: (954) 620-5050
+Bmw Of Fort Lauderdale - Dealer Code: 75784, Phone: (954) 527-3800
+Bmw Of Fort Lauderdale Ccrc - Dealer Code: 75784, Phone: (954) 926-3590
+Vista Bmw - Dealer Code: 46697, Phone: (954) 942-7400
+Vista Bmw - Dealer Code: 46697, Phone: (954) 935-2700
+Germain Bmw Of Naples - Dealer Code: 56779, Phone: (239) 643-2220
+Bmw Of Fort Myers - Dealer Code: 22081, Phone: (239) 433-8378
+Sandy Sansing Bmw - Dealer Code: 10698, Phone: (850) 477-1855
+Braman Motorcars - Dealer Code: 46891, Phone: (561) 684-6666
+Braman Motorcars Of Jupiter - Dealer Code: 46891, Phone: (561) 688-7000
+Bmw Of Fort Walton Beach - Dealer Code: 23805, Phone: (850) 863-2161
+Coggin Bmw Treasure Coast - Dealer Code: 21553, Phone: (772) 429-8300
+Tom Bush Bmw Ccrc - Dealer Code: 46778, Phone: (904) 743-1144
+Bmw Of Delray Beach - Dealer Code: 46586, Phone: (561) 491-2329
+GA
+Bmw Of Albany - Dealer Code: 26726, Phone: (229) 883-2040
+Taylor Bmw - Dealer Code: 36322, Phone: (866) 463-5572
+Critz Bmw - Dealer Code: 25000, Phone: (912) 354-7000
+Athens Bmw - Dealer Code: 26540, Phone: (706) 549-5340
+Bmw Of Gwinnett Place - Dealer Code: 20648, Phone: (770) 476-8800
+United Bmw - Dealer Code: 45051, Phone: (866) 413-1521
+Bmw Of Gwinnett Place Ccrc - Dealer Code: 20648, Phone: (770) 622-7986
+Nalley Bmw Of Decatur Ccrc - Dealer Code: 26715, Phone: (770) 454-5999
+Nalley Bmw Of Decatur - Dealer Code: 26715, Phone: (404) 292-1400
+Bmw Of Macon - Dealer Code: 22819, Phone: (478) 757-7000
+Global Imports - Dealer Code: 21850, Phone: (800) 263-0137
+Bmw Of Columbus - Dealer Code: 26701, Phone: (706) 596-2888
+Bmw Of South Atlanta - Dealer Code: 30955, Phone: (770) 969-0755
+HI
+Bmw Of Honolulu - Dealer Code: 76731, Phone: (808) 597-1225
+Bmw Of Hawaii - Dealer Code: 76731, Phone: (808) 930-3401
+Bmw Of Maui - Dealer Code: 76731, Phone: (808) 877-4269
+IA
+Bmw Of Des Moines Ccrc - Dealer Code: 29672, Phone: (515) 986-0240
+Bmw Of Des Moines - Dealer Code: 29672, Phone: (515) 989-5681
+Kimberly Bmw Of Davenport - Dealer Code: 26865, Phone: (563) 391-8300
+Dubuque Bmw - Dealer Code: 46387, Phone: (563) 583-7345
+Bmw Of North Liberty - Dealer Code: 46872, Phone: (319) 626-9500
+ID
+Bmw Of Idaho Falls - Dealer Code: 21538, Phone: (208) 529-4269
+Peterson Bmw Of Boise - Dealer Code: 11010, Phone: (888) 295-8415
+IL
+Newbold Bmw - Dealer Code: 36688, Phone: (618) 628-7300
+Bill Jacobs Bmw - Dealer Code: 26792, Phone: (630) 357-1200
+Perillo Bmw, Inc. - Dealer Code: 46786, Phone: (312) 981-0000
+Elmhurst Bmw - Dealer Code: 85200, Phone: (630) 833-7945
+Fields Bmw - Dealer Code: 96628, Phone: (847) 441-5300
+Patrick Bmw Ccrc - Dealer Code: 86716, Phone: (847) 605-4050
+Patrick Bmw - Dealer Code: 86716, Phone: (847) 843-4000
+Bmw Of Peoria - Dealer Code: 23968, Phone: (309) 692-4840
+Laurel Bmw Of Westmont - Dealer Code: 24987, Phone: (630) 654-5400
+Bmw Of Orland Park - Dealer Code: 39797, Phone: (708) 460-4545
+Karl Knauz Motors - Dealer Code: 52800, Phone: (847) 604-5000
+Karl Knauz Motors Ccrc - Dealer Code: 52800, Phone: (847) 604-5000
+Bmw Of Crystal Lake - Dealer Code: 46518, Phone: (815) 455-4330
+Bmw Of Champaign - Dealer Code: 39450, Phone: (217) 356-0303
+Isringhausen Imports - Dealer Code: 53781, Phone: (217) 528-2042
+Bmw Of Bloomington Ccrc - Dealer Code: 34909, Phone: (309) 664-2114
+Bmw Of Bloomington - Dealer Code: 34909, Phone: (309) 661-2691
+Bachrodt Bmw - Dealer Code: 20415, Phone: (815) 332-4700
+Bmw Of Barrington - Dealer Code: 62900, Phone: (847) 381-8900
+IN
+Bmw Of Schererville - Dealer Code: 34883, Phone: (219) 864-7333
+D-patrick Motoplex - Dealer Code: 36639, Phone: (812) 473-6590
+Bmw Of Fort Wayne - Dealer Code: 46288, Phone: (866) 938-0974
+Basney Bmw - Dealer Code: 46389, Phone: (574) 272-8504
+Basney Bmw Ccrc - Dealer Code: 46389, Phone: (574) 272-8504
+Bmw Of Lafayette - Dealer Code: 56843, Phone: (765) 449-2800
+Bmw Of Lafayette Ccrc - Dealer Code: 56843, Phone: (866) 268-5320
+Dreyer & Reinbold, Inc. - Dealer Code: 27600, Phone: (317) 573-0200
+Dreyer & Reinbold, Inc. - Dealer Code: 27600, Phone: (317) 885-4800
+D-patrick Motoplex Ccrc - Dealer Code: 36639, Phone: (812) 473-6530
+KS
+Bmw Of Topeka - Dealer Code: 41274, Phone: (785) 266-8480
+Bmw Of Wichita - Dealer Code: 44503, Phone: (316) 779-2613
+Baron Bmw Ccrc - Dealer Code: 31015, Phone: (913) 671-1350
+Baron Bmw - Dealer Code: 31015, Phone: (913) 722-5100
+KY
+Bmw Of Bowling Green - Dealer Code: 50229, Phone: (270) 745-0001
+Bmw Of Louisville Ccrc - Dealer Code: 43381, Phone: (502) 493-3370
+Bmw Of Louisville - Dealer Code: 43381, Phone: (502) 499-5080
+Bluegrass Bmw - Dealer Code: 32923, Phone: (270) 444-0660
+Don Jacobs Bmw - Dealer Code: 86627, Phone: (859) 276-3546
+LA
+Walker Bmw - Dealer Code: 46550, Phone: (318) 445-6678
+Orr Bmw Of Shreveport - Dealer Code: 43764, Phone: (318) 629-1269
+Brian Harris Bmw - Dealer Code: 76504, Phone: (225) 754-1200
+Peake Bmw - Dealer Code: 20721, Phone: (504) 469-6165
+Moss Motors, Inc. - Dealer Code: 46753, Phone: (337) 769-2690
+MA
+South Shore Bmw - Dealer Code: 51008, Phone: (781) 982-4556
+Bmw Certified Preowned Medford - Dealer Code: 34400, Phone: (617) 731-8700
+Bmw Of Cape Cod - Dealer Code: 36635, Phone: (888) 306-0995
+Berkshire Bmw - Dealer Code: 50201, Phone: (413) 443-4702
+Bmw Of West Springfield - Dealer Code: 32111, Phone: (413) 301-9053
+Herb Chambers Bmw - Dealer Code: 34400, Phone: (617) 731-1700
+Bmw Of Sudbury - Dealer Code: 31026, Phone: (508) 903-5300
+Bmw Of Shrewsbury Ccrc - Dealer Code: 46539, Phone: (508) 853-0300
+Bmw Of Shrewsbury - Dealer Code: 46539, Phone: (508) 581-5500
+Bmw Of Sudbury Wholesale Parts Annex - Dealer Code: 31026, Phone: (877) 872-9956
+Bmw Of Norwood - Dealer Code: 51007, Phone: (781) 762-2691
+Bmw Of Peabody - Dealer Code: 10699, Phone: (978) 532-8300
+Bmw Of Peabody - Dealer Code: 10699, Phone: (978) 538-9900
+MD
+Bmw Of Bel Air - Dealer Code: 51009, Phone: (443) 640-1000
+Bmw Of Annapolis Ccrc - Dealer Code: 32146, Phone: (410) 349-2509
+Bmw Of Owings Mills - Dealer Code: 48289, Phone: (410) 902-8700
+Bmw Of Catonsville Ccrc - Dealer Code: 40305, Phone: (410) 525-1000
+Bmw Of Catonsville - Dealer Code: 40305, Phone: (410) 744-2000
+Bmw Of Towson Ccrc - Dealer Code: 51009, Phone: (410) 823-3400
+Bmw Of Annapolis - Dealer Code: 32146, Phone: (410) 349-9312
+Bmw Of Towson - Dealer Code: 51009, Phone: (667) 930-2458
+Bmw Of Rockville Ccrc - Dealer Code: 50948, Phone: (301) 984-8480
+Bmw Of Rockville - Dealer Code: 50948, Phone: (301) 984-8989
+Passport Bmw - Dealer Code: 35797, Phone: (301) 423-2700
+Passport Bmw Ccrc - Dealer Code: 35797, Phone: (301) 423-2200
+Bmw Of Silver Spring - Dealer Code: 79100, Phone: (301) 890-3000
+ME
+Bmw Of Westbrook - Dealer Code: 76472, Phone: (207) 854-3200
+MI
+Bmw Of Traverse City - Dealer Code: 33540, Phone: (231) 922-2002
+Bmw Of Okemos - Dealer Code: 29189, Phone: (517) 853-2600
+Bmw Of Ann Arbor - Dealer Code: 50336, Phone: (734) 663-3309
+Bmw Of Grand Blanc - Dealer Code: 50888, Phone: (810) 695-4400
+Zeigler Bmw - Dealer Code: 96774, Phone: (269) 375-4500
+Bmw Of Farmington Hills - Dealer Code: 51049, Phone: (248) 306-6800
+Sharpe Bmw - Dealer Code: 86862, Phone: (616) 452-5101
+Bmw Of Rochester Hills - Dealer Code: 50498, Phone: (248) 997-7700
+Bmw Of Bloomfield Hills - Dealer Code: 51106, Phone: (248) 642-6565
+Bmw Of Farmington Hills - Dealer Code: 51049, Phone: (248) 473-8100
+MN
+Park Place Bmw - Dealer Code: 21359, Phone: (507) 282-9468
+Bmw Of Minnetonka - Dealer Code: 30821, Phone: (952) 303-7500
+Motorwerks Bmw - Dealer Code: 30414, Phone: (952) 888-2700
+MO
+Bmw Of West St. Louis - Dealer Code: 44013, Phone: (636) 227-5454
+Bmw Of Springfield - Dealer Code: 20416, Phone: (417) 889-9200
+Bmw Of Kansas City South - Dealer Code: 41681, Phone: (816) 501-2700
+Bmw Of Columbia - Dealer Code: 26273, Phone: (573) 446-2691
+Plaza Motor Company Ccrc - Dealer Code: 21181, Phone: (314) 301-1704
+Autohaus Bmw Of Maplewood - Dealer Code: 24024, Phone: (314) 727-8870
+Plaza Motor Company - Dealer Code: 21181, Phone: (314) 301-1705
+MS
+Galleria Bmw - Dealer Code: 43384, Phone: (228) 232-0333
+Bmw Of Jackson - Dealer Code: 49543, Phone: (601) 354-2269
+Bmw Of Meridian - Dealer Code: 41053, Phone: (601) 483-8131
+NC
+Valley Auto World, Inc. - Dealer Code: 36752, Phone: (910) 867-7000
+Bmw Of Wilmington - Dealer Code: 42766, Phone: (910) 392-2700
+Hendrick Bmw - Dealer Code: 66788, Phone: (866) 755-7302
+Hendrick Bmw Ccrc - Dealer Code: 66788, Phone: (704) 566-7497
+Flow Bmw Ccrc - Dealer Code: 15268, Phone: (336) 723-3524
+Flow Bmw - Dealer Code: 15268, Phone: (336) 788-3333
+Bmw Of Southpoint - Dealer Code: 26338, Phone: (919) 897-2137
+Bmw Of Greensboro - Dealer Code: 51991, Phone: (336) 323-3900
+Bmw Of Greensboro Ccrc - Dealer Code: 51991, Phone: (336) 547-0120
+Bmw Of Asheville - Dealer Code: 33147, Phone: (828) 681-9900
+Sale Bmw - Dealer Code: 16378, Phone: (252) 522-3611
+Bmw Of Southpoint Ccrc - Dealer Code: 26338, Phone: (919) 897-2137
+Leith Bmw - Dealer Code: 55200, Phone: (919) 876-5432
+Hendrick Bmw Certified Pre-owned - Dealer Code: 66788, Phone: (704) 535-0885
+Hendrick Bmw Northlake - Dealer Code: 66788, Phone: (704) 379-3100
+NE
+Bmw Of Omaha - Dealer Code: 61100, Phone: (402) 393-9700
+Bmw Of Lincoln Ccrc - Dealer Code: 23071, Phone: (402) 479-7690
+Bmw Of Lincoln - Dealer Code: 23071, Phone: (402) 479-7500
+NH
+Tulley Bmw Manchester - Dealer Code: 16815, Phone: (603) 644-2691
+Tulley Bmw - Dealer Code: 16815, Phone: (603) 888-5050
+Tulley Bmw Ccrc - Dealer Code: 16815, Phone: (603) 888-0550
+Bmw Of Stratham - Dealer Code: 29461, Phone: (603) 772-0000
+NJ
+Open Road Bmw - Dealer Code: 56738, Phone: (732) 839-4500
+Princeton Bmw - Dealer Code: 42868, Phone: (609) 570-1520
+Flemington Bmw - Dealer Code: 23418, Phone: (908) 788-2691
+Bmw Of Bloomfield - Dealer Code: 26717, Phone: (973) 748-8200
+Paul Miller Bmw - Dealer Code: 22227, Phone: (973) 696-6060
+Paul Miller Bmw Ccrc - Dealer Code: 22227, Phone: (862) 377-0700
+Park Avenue Bmw - Dealer Code: 68500, Phone: (201) 843-7900
+Bmw Of Ramsey - Dealer Code: 46579, Phone: (201) 258-6000
+Bmw Of Mt. Laurel Ccrc - Dealer Code: 31638, Phone: (856) 235-8902
+Bmw Of Mt. Laurel - Dealer Code: 31638, Phone: (856) 840-1400
+Bmw Of Turnersville - Dealer Code: 21295, Phone: (856) 516-6500
+Bmw Of Turnersville Ccrc - Dealer Code: 21295, Phone: (856) 347-0900
+Bmw Of Freehold - Dealer Code: 30462, Phone: (732) 984-6006
+Bmw Of Bridgewater - Dealer Code: 21102, Phone: (908) 287-1800
+Circle Bmw - Dealer Code: 66771, Phone: (732) 440-1200
+Bmw Of Newton - Dealer Code: 34559, Phone: (973) 579-2600
+Bmw Of Morristown - Dealer Code: 16856, Phone: (973) 455-0700
+Bmw Of Springfield Ccrc - Dealer Code: 43005, Phone: (973) 379-7744
+Bmw Of Springfield - Dealer Code: 43005, Phone: (973) 379-7744
+Bmw Of Atlantic City - Dealer Code: 30374, Phone: (609) 568-9200
+Bmw Of Roxbury - Dealer Code: 26711, Phone: (973) 627-0700
+Bmw Of Tenafly - Dealer Code: 76350, Phone: (201) 568-9000
+NM
+Santa Fe Bmw - Dealer Code: 48291, Phone: (505) 474-0066
+Sandia Bmw - Dealer Code: 48401, Phone: (866) 428-9748
+NV
+Bill Pearce Bmw - Dealer Code: 26419, Phone: (775) 826-2100
+Bill Pearce Bmw Ccrc - Dealer Code: 26419, Phone: (775) 789-7966
+Bmw Of Las Vegas - Dealer Code: 21294, Phone: (702) 570-0279
+Bmw Of Henderson - Dealer Code: 21294, Phone: (702) 570-0278
+Bmw Of Las Vegas Ccrc - Dealer Code: 21294, Phone: (702) 871-1010
+NY
+Bmw Of Greenwich-mamaroneck - Dealer Code: 40808, Phone: (914) 670-0011
+Bmw Of Brooklyn - Dealer Code: 56000, Phone: (718) 759-5940
+Habberstad Bmw Of Bay Shore - Dealer Code: 40800, Phone: (631) 647-6700
+Keeler Bmw - Dealer Code: 51200, Phone: (518) 785-4197
+Bmw Of Freeport Ccrc - Dealer Code: 41518, Phone: (516) 378-0010
+Bmw Of Bayside - Dealer Code: 10695, Phone: (877) 244-9910
+Keeler Bmw Ccrc - Dealer Code: 51200, Phone: (888) 486-7103
+Bmw Of Buffalo - Dealer Code: 52082, Phone: (716) 505-2100
+Rallye Bmw Ccrc - Dealer Code: 69000, Phone: (516) 741-1800
+Rallye Bmw - Dealer Code: 69000, Phone: (516) 393-0000
+Wide World Bmw - Dealer Code: 25770, Phone: (845) 425-2600
+Bmw Of Manhattan - Dealer Code: 65775, Phone: (212) 586-2269
+Bmw Of South Albany - Dealer Code: 43383, Phone: (518) 463-3141
+Bmw Of Rochester - Dealer Code: 34520, Phone: (585) 359-7373
+Burdick Bmw - Dealer Code: 86854, Phone: (315) 459-6000
+Bmw Of Freeport - Dealer Code: 41518, Phone: (516) 223-6160
+Bmw Of The Hudson Valley - Dealer Code: 21614, Phone: (845) 462-1030
+Bmw Of Westchester - Dealer Code: 33326, Phone: (914) 761-5555
+Orange County Bmw - Dealer Code: 20989, Phone: (845) 782-4269
+Gault Auto Sport Bmw - Dealer Code: 21183, Phone: (607) 748-8244
+Habberstad Bmw - Dealer Code: 40800, Phone: (631) 271-7177
+Wide World Bmw Ccrc - Dealer Code: 25770, Phone: (845) 425-2600
+Habberstad Bmw Ccrc - Dealer Code: 40800, Phone: (631) 271-5494
+Bmw Of Southampton - Dealer Code: 34521, Phone: (631) 283-0888
+Competition Bmw Of Smithtown - Dealer Code: 22800, Phone: (631) 265-2208
+Bmw Of Mt. Kisco - Dealer Code: 51826, Phone: (914) 614-0884
+OH
+Preston Bmw - Dealer Code: 20635, Phone: (330) 965-2766
+Bmw Of Cincinnati North Ccrc - Dealer Code: 46631, Phone: (513) 782-1122
+Bmw Of Cincinnati North - Dealer Code: 46631, Phone: (513) 782-2832
+The Bmw Store - Dealer Code: 96717, Phone: (513) 271-8700
+Bmw Of Westlake - Dealer Code: 56357, Phone: (440) 845-9333
+Cain Bmw - Dealer Code: 96644, Phone: (330) 494-5588
+Voss Village Bmw - Dealer Code: 66641, Phone: (937) 433-5111
+Bmw Of Akron - Dealer Code: 46222, Phone: (330) 762-0791
+Bmw Of Dayton - Dealer Code: 31663, Phone: (937) 890-6200
+Bmw Of Toledo - Dealer Code: 16345, Phone: (419) 842-7900
+Mag Bmw Of Dublin - Dealer Code: 25803, Phone: (614) 889-2571
+Kelly Bmw - Dealer Code: 46615, Phone: (614) 471-2277
+Bmw Of Westlake - Dealer Code: 56357, Phone: (877) 831-5105
+Voss Village Bmw Ccrc - Dealer Code: 66641, Phone: (937) 428-2355
+Bmw Cleveland - Dealer Code: 95801, Phone: (440) 542-0600
+Classic Bmw - Dealer Code: 96499, Phone: (440) 585-9990
+OK
+Jackie Cooper Imports - Dealer Code: 35071, Phone: (866) 597-5676
+Bmw Of Tulsa - Dealer Code: 25786, Phone: (918) 663-4444
+OR
+Kuni Bmw - Dealer Code: 36021, Phone: (503) 828-0952
+Bmw Of Eugene - Dealer Code: 45332, Phone: (541) 342-1763
+Bmw Of Bend - Dealer Code: 40807, Phone: (541) 382-1711
+Bmw Portland - Dealer Code: 36459, Phone: (800) 226-7689
+Medford Bmw - Dealer Code: 49962, Phone: (541) 774-8450
+Kuni Bmw Ccrc - Dealer Code: 36021, Phone: (503) 372-7563
+Bmw Of Salem - Dealer Code: 39668, Phone: (503) 399-9541
+PA
+Bmw Of Reading - Dealer Code: 34753, Phone: (877) 866-6272
+Wyoming Valley Bmw - Dealer Code: 44721, Phone: (570) 287-1133
+Otto's Bmw - Dealer Code: 67600, Phone: (866) 265-7073
+Thompson Bmw - Dealer Code: 26776, Phone: (215) 340-3900
+Bmw Of Lancaster - Dealer Code: 43336, Phone: (717) 569-4269
+Daniels Bmw Ccrc - Dealer Code: 26200, Phone: (610) 820-2950
+Bmw Of Lancaster Ccrc - Dealer Code: 43336, Phone: (717) 293-7800
+Bmw Of Reading Ccrc - Dealer Code: 34753, Phone: (610) 375-9991
+Bmw Of Williamsport - Dealer Code: 48081, Phone: (570) 567-2021
+New Motors, Inc. - Dealer Code: 46672, Phone: (814) 868-4805
+Apple Bmw Of York - Dealer Code: 26713, Phone: (717) 845-6689
+Bmw Of Devon - Dealer Code: 40713, Phone: (610) 687-9350
+Bmw Of The Main Line - Dealer Code: 36640, Phone: (610) 668-2200
+Sun Motor Cars Bmw Ccrc - Dealer Code: 26700, Phone: (717) 697-2300
+Sun Motor Cars Bmw - Dealer Code: 26700, Phone: (800) 470-8133
+Joel Confer Bmw - Dealer Code: 86732, Phone: (814) 237-5713
+Bmw Of Fort Washington - Dealer Code: 50644, Phone: (215) 643-3322
+Laurel Bmw - Dealer Code: 66390, Phone: (888) 269-3130
+Bobby Rahal Bmw Of South Hills - Dealer Code: 26725, Phone: (724) 746-2600
+Sewickley Bmw - Dealer Code: 86327, Phone: (412) 741-6400
+P & W Bmw - Dealer Code: 34910, Phone: (412) 682-0788
+A & L Bmw - Dealer Code: 86813, Phone: (412) 373-6071
+Tom Hesser Bmw - Dealer Code: 16734, Phone: (570) 343-1221
+Daniels Bmw - Dealer Code: 26200, Phone: (610) 820-2950
+PR
+Autogermana Bmw Ccrc - Dealer Code: 10742, Phone: (787) 200-2818
+Autogermana Bmw - Dealer Code: 10742, Phone: (787) 474-7000
+RI
+Bmw Of Warwick - Dealer Code: 26703, Phone: (401) 824-2399
+Bmw Of Warwick Ccrc - Dealer Code: 26703, Phone: (401) 824-2333
+Bmw Of Newport - Dealer Code: 43006, Phone: (401) 847-9600
+SC
+Bmw Of Columbia - Dealer Code: 31384, Phone: (803) 404-5400
+Century Bmw - Dealer Code: 21470, Phone: (864) 234-6437
+Century Bmw Ccrc - Dealer Code: 21470, Phone: (888) 474-5781
+Hilton Head Bmw - Dealer Code: 36634, Phone: (843) 815-1501
+Rick Hendrick Bmw Charleston - Dealer Code: 46826, Phone: (843) 763-8403
+Bmw Of Florence - Dealer Code: 36722, Phone: (843) 662-8711
+Bmw Of Myrtle Beach - Dealer Code: 47212, Phone: (843) 848-6800
+SD
+Bmw Of Sioux Falls - Dealer Code: 35121, Phone: (866) 980-3526
+TN
+Rick Hill Bmw - Dealer Code: 56892, Phone: (423) 246-7421
+Roadshow Bmw - Dealer Code: 56802, Phone: (901) 365-2584
+Bmw Of Nashville Ccrc - Dealer Code: 21234, Phone: (615) 242-4242
+Bmw Certified Pre-owned Nashville - Dealer Code: 21234, Phone: (615) 850-4040
+Bmw Of Nashville - Dealer Code: 21234, Phone: (615) 850-4040
+Bmw Of Chattanooga - Dealer Code: 21233, Phone: (423) 894-5660
+Grayson Bmw - Dealer Code: 16694, Phone: (865) 693-4555
+Grayson Bmw Ccrc - Dealer Code: 16694, Phone: (865) 693-4550
+TX
+Bmw Of Beaumont - Dealer Code: 21853, Phone: (409) 840-3585
+Bmw Of El Paso - Dealer Code: 36270, Phone: (915) 778-9381
+Bmw Of Wichita Falls - Dealer Code: 50946, Phone: (940) 766-0293
+Autoplex Bmw - Dealer Code: 26840, Phone: (806) 359-2886
+Bmw Of Plano - Dealer Code: 50923, Phone: (214) 778-2600
+Bmw Of Grapevine - Dealer Code: 43786, Phone: (817) 912-4500
+Bmw Of Plano - Dealer Code: 50923, Phone: (972) 918-1156
+Bmw Of El Paso Ccrc - Dealer Code: 36270, Phone: (888) 693-9989
+Autobahn Motorcars - Dealer Code: 47993, Phone: (817) 336-0885
+Bmw Of Austin - Dealer Code: 26167, Phone: (512) 343-3500
+Bmw Of South Austin - Dealer Code: 44235, Phone: (512) 438-7500
+Bmw Of Austin Ccrc - Dealer Code: 26167, Phone: (512) 244-9333
+Bmw Of College Station - Dealer Code: 43380, Phone: (979) 314-2000
+Bmw Of West Houston - Dealer Code: 43775, Phone: (832) 772-9000
+Bmw Of Dallas - Dealer Code: 26731, Phone: (972) 763-5528
+Momentum Bmw Ccrc - Dealer Code: 26747, Phone: (877) 755-0432
+Momentum Bmw - Dealer Code: 26747, Phone: (713) 596-3100
+Bmw Of Houston North - Dealer Code: 21471, Phone: (281) 775-4400
+Bmw Of Houston North Ccrc - Dealer Code: 21471, Phone: (281) 209-4053
+Advantage Bmw - Dealer Code: 28628, Phone: (713) 289-1200
+Bmw Of Clear Lake - Dealer Code: 51029, Phone: (281) 557-7000
+Bmw Of The Woodlands - Dealer Code: 45289, Phone: (936) 271-3000
+Bmw Of Temple - Dealer Code: 42319, Phone: (254) 771-0128
+Bmw Of Arlington - Dealer Code: 40304, Phone: (817) 436-5700
+Bmw Of Arlington Ccrc - Dealer Code: 40304, Phone: (817) 436-5840
+Bmw Of Lubbock - Dealer Code: 50857, Phone: (806) 763-8041
+Bert Ogden Bmw - Dealer Code: 13761, Phone: (956) 686-6666
+Cardenas Bmw - Dealer Code: 10022, Phone: (956) 425-2400
+Bmw Of Dallas Wholesale Parts Annex - Dealer Code: 26731, Phone: (972) 895-3044
+Bmw Of Corpus Christi - Dealer Code: 44812, Phone: (361) 991-5555
+Bmw Of Tyler - Dealer Code: 43552, Phone: (903) 561-7049
+Bmw Of San Antonio - Dealer Code: 42164, Phone: (210) 732-7121
+Bmw Of The Permian Basin - Dealer Code: 45533, Phone: (432) 522-5900
+UT
+Bmw Of Murray - Dealer Code: 55806, Phone: (801) 262-2479
+Bmw Of Pleasant Grove - Dealer Code: 55806, Phone: (801) 443-2000
+VA
+Richmond Bmw - Dealer Code: 21608, Phone: (804) 897-2200
+Checkered Flag Bmw - Dealer Code: 25244, Phone: (757) 490-1111
+Checkered Flag Bmw Ccrc - Dealer Code: 25244, Phone: (757) 687-3486
+Richmond Bmw - Dealer Code: 21608, Phone: (804) 346-0812
+Casey Bmw - Dealer Code: 56592, Phone: (757) 514-8496
+Bmw Of Lynchburg - Dealer Code: 39741, Phone: (434) 385-6226
+Bmw Of Fairfax Ccrc - Dealer Code: 22006, Phone: (800) 530-0975
+Bmw Of Roanoke - Dealer Code: 51637, Phone: (540) 342-3733
+Bmw Of Alexandria - Dealer Code: 36771, Phone: (703) 684-8500
+Bmw Of Charlottesville - Dealer Code: 50887, Phone: (434) 327-5378
+Bmw Of Sterling - Dealer Code: 49851, Phone: (571) 933-8222
+Bmw Of Fairfax - Dealer Code: 22006, Phone: (703) 560-2300
+VT
+The Automaster - Dealer Code: 16718, Phone: (802) 985-8411
+WA
+Bmw Of Bellevue - Dealer Code: 10732, Phone: (425) 243-5201
+Bmw Northwest - Dealer Code: 46038, Phone: (866) 529-3254
+Bmw Seattle - Dealer Code: 24336, Phone: (206) 328-8787
+Bmw Of Spokane - Dealer Code: 21613, Phone: (509) 458-3288
+Bmw Of Tri-cities - Dealer Code: 42277, Phone: (509) 943-9839
+WI
+Enterprise Bmw - Dealer Code: 86302, Phone: (920) 749-2020
+Bmw Of Milwaukee North Ccrc - Dealer Code: 43872, Phone: (414) 290-4360
+Bmw Of Madison - Dealer Code: 63766, Phone: (608) 443-3900
+Bmw Of Madison Ccrc - Dealer Code: 63766, Phone: (608) 443-5770
+International Autos - Dealer Code: 20133, Phone: (414) 543-3000
+Bmw Of Milwaukee North - Dealer Code: 43872, Phone: (414) 290-4200
+WV
+Moses Bmw - Dealer Code: 15673, Phone: (304) 722-4900
+"""
+
+# Parse
+state_codes = set("""
+AL AK AZ AR CA CO CT DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT
+NC ND NE NH NJ NM NV NY OH OK OR PA PR RI SC SD TN TX UT VA VT WA WI WV DC
+""".split())
+
+current_state = None
+rows = []
+
+line_re = re.compile(r"""^\s*(?P<name>.+?)\s*-\s*Dealer Code:\s*(?P<code>[0-9]+)\s*,\s*Phone:\s*(?P<phone>\([0-9\)\-\s]+[0-9]\))\s*$""", re.IGNORECASE)
+
+for raw_line in raw.splitlines():
+    line = raw_line.strip()
+    if not line: 
+        continue
+    # Heading line to skip
+    if line.lower().startswith("bmw dealers in"):
+        continue
+    # State line (two letters)
+    if re.fullmatch(r"[A-Z]{2}", line) and line in state_codes:
+        current_state = line
+        continue
+    # Dealer line
+    m = line_re.match(line)
+    if m and current_state:
+        name = m.group("name").strip()
+        code = m.group("code").strip()
+        phone = m.group("phone").strip()
+        rows.append({"name": name, "state": current_state, "dealer_code": code, "phone": phone})
+    else:
+        # If a dealer line doesn't match exactly, try a softer parse
+        if current_state and "Dealer Code:" in line and "Phone:" in line:
+            try:
+                name_part, rest = line.split(" - Dealer Code:", 1)
+                code_part, phone_part = rest.split(", Phone:", 1)
+                name = name_part.strip()
+                code = re.sub(r"\D", "", code_part)
+                phone = phone_part.strip()
+                rows.append({"name": name, "state": current_state, "dealer_code": code, "phone": phone})
+            except Exception:
+                pass  # ignore malformed lines
+
+df = pd.DataFrame(rows, columns=["name","state","dealer_code","phone"])
