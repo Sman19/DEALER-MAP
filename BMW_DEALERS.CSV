@@ -1,5 +1,5 @@
 // Load CSV: expected headers: name,state,dealer_code,phone,lat,lng
-Papa.parse('bmw_dealers.csv', {
+Papa.parse('BMW_DEALERS.CSV', {
   download: true,
   header: true,
   skipEmptyLines: true,
