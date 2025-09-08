@@ -73,15 +73,18 @@
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
-    function addPoint(lat, lng, name, state = '', code = '', phone = '') {
-      const m = L.circleMarker([lat, lng], {
-        radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
-      }).bindPopup(`
-        <div class="tooltip-title">${name}</div>
-        ${state ? `<div><b>State:</b> ${state}</div>` : ''}
-        ${code  ? `<div><b>Dealer Code:</b> ${code}</div>` : ''}
-        ${phone ? `<div><b>Phone:</b> ${phone}</div>` : ''}
-      `);
+   function addPoint(lat, lng, name, state = '', code = '', phone = '', url = '') {
+  const popupHtml = `
+    <div class="tooltip-title">${name}</div>
+    ${state ? `<div><b>State:</b> ${state}</div>` : ''}
+    ${code  ? `<div><b>Dealer Code:</b> ${code}</div>` : ''}
+    ${phone ? `<div><b>Phone:</b> ${phone}</div>` : ''}
+    ${url   ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
+  `;
+
+  const m = L.circleMarker([lat, lng], {
+    radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
+  }).bindPopup(popupHtml);
 
       m.meta = {
         name: (name||'').toLowerCase(),
@@ -120,16 +123,17 @@
       skipEmptyLines: true,
       complete: function(results) {
         results.data.forEach(function(r) {
-          const name  = (r.name || '').trim();
-          const state = (r.state || '').trim();
-          const code  = (r.dealer_code || '').trim();
-          const phone = (r.phone || '').trim();
-          const lat   = parseFloat(r.lat);
-          const lng   = parseFloat(r.lng);
+        const name  = (r.name || '').trim();
+        const state = (r.state || '').trim();
+        const code  = (r.dealer_code || '').trim();
+        const phone = (r.phone || '').trim();
+        const lat   = parseFloat(r.lat);
+        const lng   = parseFloat(r.lng);
+        const url   = (r.url || '').trim();
 
-          if (name && !isNaN(lat) && !isNaN(lng)) {
-            addPoint(lat, lng, name, state, code, phone);
-          }
+        if (name && !isNaN(lat) && !isNaN(lng)) {
+        addPoint(lat, lng, name, state, code, phone, url);
+        }
         });
 
         renderMarkers();
