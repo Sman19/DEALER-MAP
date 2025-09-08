@@ -114,44 +114,105 @@
     }
 
     // Load CSV (headers: name,state,dealer_code,phone,lat,lng)
-    Papa.parse('bmw_dealers.CSV', {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        (results.data || []).forEach(r => {
-          const name  = (r.name || '').trim();
-          const state = (r.state || '').trim();
-          const code  = (r.dealer_code || '').trim();
-          const phone = (r.phone || '').trim();
-          const lat   = parseFloat(r.lat);
-          const lng   = parseFloat(r.lng);
-          if (!name || Number.isNaN(lat) || Number.isNaN(lng)) return;
-          addPoint(lat, lng, name, state, code, phone);
-        });
+    <script>
+// ---- client-side geocoding helper ----
+const GEOCODE_CACHE_KEY = 'bmw_geocode_cache_v1';
+let geoCache = {};
+try { geoCache = JSON.parse(localStorage.getItem(GEOCODE_CACHE_KEY) || '{}'); } catch { geoCache = {}; }
+const saveCache = () => localStorage.setItem(GEOCODE_CACHE_KEY, JSON.stringify(geoCache));
 
-        renderMarkers();
-        if (allMarkers.length > 0) {
-          try { map.fitBounds(bounds.pad(0.2)); } catch {}
+async function geocodeDealer(name, state) {
+  const query = `${name}, ${state}, USA`;
+  if (geoCache[query] !== undefined) return geoCache[query];
+
+  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=us&q=${encodeURIComponent(query)}`;
+  const resp = await fetch(url, { headers: { 'Accept': 'application/json' }});
+  if (!resp.ok) { geoCache[query] = null; saveCache(); return null; }
+
+  const data = await resp.json();
+  if (Array.isArray(data) && data[0]) {
+    const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    geoCache[query] = coords; saveCache();
+    return coords;
+  }
+  geoCache[query] = null; saveCache();
+  return null;
+}
+
+// polite delay between geocoding calls
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+// keep a copy of enriched rows so you can download a finished CSV
+const enrichedRows = [];
+
+// ===== REPLACE your Papa.parse block with everything below =====
+Papa.parse('bmw_dealers.CSV', {
+  download: true,
+  header: true,
+  skipEmptyLines: true,
+  complete: async function(results) {
+    const rows = results.data;
+
+    for (const r of rows) {
+      const name  = (r.name || '').trim();
+      const state = (r.state || '').trim();
+      const code  = (r.dealer_code || '').trim();
+      const phone = (r.phone || '').trim();
+
+      let lat = parseFloat(r.lat);
+      let lng = parseFloat(r.lng);
+
+      // if lat/lng are missing or invalid, try to geocode
+      if (!name) continue;
+      if (isNaN(lat) || isNaN(lng)) {
+        const coords = await geocodeDealer(name, state);
+        if (!coords) { 
+          // couldn't geocode — skip plotting but keep for CSV output
+          enrichedRows.push({name, state, dealer_code: code, phone, lat: '', lng: ''});
+          // be polite to the free service
+          await sleep(1200);
+          continue;
         }
-      },
-      error: (err) => {
-        console.error('CSV load error:', err);
-        alert('Could not load bmw_dealers.CSV. Check file name and headers.');
+        lat = coords.lat; lng = coords.lng;
+        // be polite to the free service
+        await sleep(1200);
       }
-    });
 
-    // UI
-    searchInput.addEventListener('input', () => renderMarkers(searchInput.value));
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      searchInput.value = '';
-      renderMarkers('');
-      if (markerLayer.getLayers().length) {
-        try { map.fitBounds(markerLayer.getBounds().pad(0.2)); } catch {}
-      } else {
-        map.setView([39.5, -98.35], 4);
-      }
-    });
-  </script>
-</body>
-</html>
+      // plot & record
+      addPoint(lat, lng, name, state, code, phone);
+      enrichedRows.push({name, state, dealer_code: code, phone, lat, lng});
+      renderMarkers();
+    }
+
+    // zoom to markers if we have any
+    if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+
+    // optional: offer a download of the enriched CSV
+    offerCsvDownload(enrichedRows, 'bmw_dealers_geocoded.csv');
+  }
+});
+
+// helper to download a CSV of enriched data
+function offerCsvDownload(rows, filename) {
+  if (!rows.length) return;
+  const headers = ['name','state','dealer_code','phone','lat','lng'];
+  const csv = [headers.join(',')]
+    .concat(rows.map(r => headers.map(h => {
+      const v = r[h] ?? '';
+      // simple CSV escaping
+      return /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g,'""')}"` : v;
+    }).join(',')))
+    .join('\n');
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv'}));
+  a.download = filename;
+  a.textContent = 'Download geocoded CSV';
+  a.style.position = 'absolute';
+  a.style.right = '12px';
+  a.style.bottom = '12px';
+  a.style.zIndex = 1000;
+  a.className = 'leaflet-control';
+  document.body.appendChild(a);
+}
+</script>
