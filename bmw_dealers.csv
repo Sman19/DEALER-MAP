@@ -488,4 +488,3 @@ out_path = "/mnt/data/bmw_dealers.CSV"
 df.to_csv(out_path, index=False)
 
 len(df), out_path
-
