@@ -16,52 +16,21 @@
   <style>
     html, body { height: 100%; margin: 0; }
     #map { height: 100vh; width: 100vw; }
-
     .controls {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: #fff;
-      padding: 8px 10px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15);
-      display: flex;
-      gap: 8px;
-      align-items: center;
+      position: absolute; top: 12px; left: 12px; z-index: 1000;
+      background: #fff; padding: 8px 10px; border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15); display: flex; gap: 8px; align-items: center;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      z-index: 1000;
     }
-    .controls input {
-      padding: 6px 8px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      width: 260px;
-    }
-    .controls button {
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      cursor: pointer;
-      background: #f6f6f6;
-    }
+    .controls input { padding: 6px 8px; border-radius: 8px; border: 1px solid #ddd; width: 260px; }
+    .controls button { padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; background: #f6f6f6; }
     .legend {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      background: #fff;
-      padding: 8px 10px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      position: absolute; bottom: 12px; left: 12px; z-index: 1000;
+      background: #fff; padding: 8px 10px; border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15); font-size: 13px; line-height: 1.35;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      font-size: 13px;
-      line-height: 1.35;
-      z-index: 1000;
     }
-    .tooltip-title {
-      font-weight: 700;
-      margin-bottom: 4px;
-      font-size: 15px;
-    }
+    .tooltip-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
     .count { font-weight: 600; }
   </style>
 </head>
@@ -77,7 +46,7 @@
   <div class="legend">
     <div><span class="count" id="totalCount">0</span> BMW dealers loaded</div>
     <div>• Click a dot to see details</div>
-    <div>• Data source: <code>bmw_dealers.CSV</code></div>
+    <div>• Data file: <code>bmw_dealers.CSV</code></div>
   </div>
 
   <!-- Leaflet JS -->
@@ -91,8 +60,8 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <script>
-    // Base map
-    const map = L.map('map', { zoomControl: true }).setView([39.5, -98.35], 4); // US centroid
+    // Map setup
+    const map = L.map('map', { zoomControl: true }).setView([39.5, -98.35], 4);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -106,10 +75,7 @@
 
     function addPoint(lat, lng, name, state = '', code = '', phone = '') {
       const m = L.circleMarker([lat, lng], {
-        radius: 5,
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.85
+        radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
       }).bindPopup(`
         <div class="tooltip-title">${name}</div>
         ${state ? `<div><b>State:</b> ${state}</div>` : ''}
@@ -117,12 +83,11 @@
         ${phone ? `<div><b>Phone:</b> ${phone}</div>` : ''}
       `);
 
-      // fields used for simple client-side filtering
       m.meta = {
-        name: (name || '').toLowerCase(),
-        state: (state || '').toLowerCase(),
-        code: (code || '').toLowerCase(),
-        phone: (phone || '').toLowerCase()
+        name: (name||'').toLowerCase(),
+        state: (state||'').toLowerCase(),
+        code: (code||'').toLowerCase(),
+        phone: (phone||'').toLowerCase()
       };
 
       allMarkers.push(m);
@@ -131,20 +96,15 @@
 
     function renderMarkers(filterText = '') {
       markerLayer.clearLayers();
+      const f = (filterText||'').trim().toLowerCase();
       let visible = 0;
-      const f = (filterText || '').trim().toLowerCase();
 
       for (const m of allMarkers) {
-        const hit = !f ||
-          m.meta.name.includes(f) ||
-          m.meta.state.includes(f) ||
-          m.meta.code.includes(f) ||
-          m.meta.phone.includes(f);
-        if (hit) {
-          m.addTo(markerLayer);
-          visible++;
-        }
+        const hit = !f || m.meta.name.includes(f) || m.meta.state.includes(f) ||
+                    m.meta.code.includes(f) || m.meta.phone.includes(f);
+        if (hit) { m.addTo(markerLayer); visible++; }
       }
+
       shownCount.textContent = `${visible} shown`;
       totalCount.textContent = allMarkers.length;
 
@@ -153,21 +113,19 @@
       }
     }
 
-    // Load CSV (headers expected: name,state,dealer_code,phone,lat,lng)
+    // Load CSV (headers: name,state,dealer_code,phone,lat,lng)
     Papa.parse('bmw_dealers.CSV', {
       download: true,
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        const rows = results.data;
-        rows.forEach(r => {
+        (results.data || []).forEach(r => {
           const name  = (r.name || '').trim();
           const state = (r.state || '').trim();
           const code  = (r.dealer_code || '').trim();
           const phone = (r.phone || '').trim();
           const lat   = parseFloat(r.lat);
           const lng   = parseFloat(r.lng);
-
           if (!name || Number.isNaN(lat) || Number.isNaN(lng)) return;
           addPoint(lat, lng, name, state, code, phone);
         });
@@ -179,16 +137,16 @@
       },
       error: (err) => {
         console.error('CSV load error:', err);
-        alert('Could not load bmw_dealers.CSV. Make sure the file name and headers match.');
+        alert('Could not load bmw_dealers.CSV. Check file name and headers.');
       }
     });
 
-    // UI events
+    // UI
     searchInput.addEventListener('input', () => renderMarkers(searchInput.value));
     document.getElementById('resetBtn').addEventListener('click', () => {
       searchInput.value = '';
       renderMarkers('');
-      if (markerLayer.getLayers().length > 0) {
+      if (markerLayer.getLayers().length) {
         try { map.fitBounds(markerLayer.getBounds().pad(0.2)); } catch {}
       } else {
         map.setView([39.5, -98.35], 4);
