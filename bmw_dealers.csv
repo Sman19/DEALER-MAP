@@ -438,46 +438,54 @@ WV
 Moses BMW,WV,15673,(304) 722-4900,38.411800,-81.800200
 """
 
-# Parse
+# Allowed 2-letter state codes:
 state_codes = set("""
 AL AK AZ AR CA CO CT DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT
 NC ND NE NH NJ NM NV NY OH OK OR PA PR RI SC SD TN TX UT VA VT WA WI WV DC
 """.split())
 
-current_state = None
 rows = []
 
-line_re = re.compile(r"""^\s*(?P<name>.+?)\s*-\s*Dealer Code:\s*(?P<code>[0-9]+)\s*,\s*Phone:\s*(?P<phone>\([0-9\)\-\s]+[0-9]\))\s*$""", re.IGNORECASE)
+def try_parse_csv_line(line):
+    # Expect 6 fields: name,state,dealer_code,phone,lat,lng
+    parts = [p.strip() for p in line.split(",")]
+    if len(parts) >= 6:
+        # Join any extra commas in the name (unlikely here)
+        name = ",".join(parts[:len(parts)-5])
+        state, dealer_code, phone, lat, lng = parts[-5:]
+        # Validate
+        if state in state_codes:
+            try:
+                latf = float(lat); lngf = float(lng)
+                return dict(name=name, state=state, dealer_code=dealer_code, phone=phone, lat=latf, lng=lngf)
+            except Exception:
+                return None
+    return None
+
+# pattern for "Name - Dealer Code: 12345, Phone: (xxx) xxx-xxxx" (no coords -> skip)
+dash_pat = re.compile(r"^(?P<name>.+?)\s*-\s*Dealer Code:\s*([0-9]+)\s*,\s*Phone:\s*\(.+\)$", re.I)
 
 for raw_line in raw.splitlines():
     line = raw_line.strip()
-    if not line: 
+    if not line or line.lower().startswith("bmw dealers in"): 
         continue
-    # Heading line to skip
-    if line.lower().startswith("bmw dealers in"):
+    if line.lower().startswith("name,state"):  # header repeats; skip
         continue
-    # State line (two letters)
     if re.fullmatch(r"[A-Z]{2}", line) and line in state_codes:
-        current_state = line
+        continue  # skip section headers
+    m = try_parse_csv_line(line)
+    if m:
+        rows.append(m)
         continue
-    # Dealer line
-    m = line_re.match(line)
-    if m and current_state:
-        name = m.group("name").strip()
-        code = m.group("code").strip()
-        phone = m.group("phone").strip()
-        rows.append({"name": name, "state": current_state, "dealer_code": code, "phone": phone})
-    else:
-        # If a dealer line doesn't match exactly, try a softer parse
-        if current_state and "Dealer Code:" in line and "Phone:" in line:
-            try:
-                name_part, rest = line.split(" - Dealer Code:", 1)
-                code_part, phone_part = rest.split(", Phone:", 1)
-                name = name_part.strip()
-                code = re.sub(r"\D", "", code_part)
-                phone = phone_part.strip()
-                rows.append({"name": name, "state": current_state, "dealer_code": code, "phone": phone})
-            except Exception:
-                pass  # ignore malformed lines
+    # If it's the dash format, we can't include (missing lat/lng) — skip for now
+    if dash_pat.match(line):
+        continue
 
-df = pd.DataFrame(rows, columns=["name","state","dealer_code","phone"])
+df = pd.DataFrame(rows, columns=["name","state","dealer_code","phone","lat","lng"])
+
+# Save cleaned CSV with a single header row
+out_path = "/mnt/data/bmw_dealers.CSV"
+df.to_csv(out_path, index=False)
+
+len(df), out_path
+
