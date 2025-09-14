@@ -83,12 +83,11 @@
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
-    // basic HTML escape
     const esc = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
-    function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
-      const copyText = `${street}\n${city}, ${state}\n${phone}, ${zip}\nDealer Code: ${code}`;
+    function addPoint(lat, lng, name, state = '', code = '', phone = '', street = '', city = '', zip = '', url = '') {
+      const copyText = `${street}\n${city}, ${state} ${zip}\n${phone}\nDealer Code: ${code}`;
 
       const popupHtml = `
         <div class="popup-header">
@@ -117,7 +116,7 @@
       bounds.extend([lat, lng]);
     }
 
-    // Copy handler (button text flips to "Copied!" briefly)
+    // Copy button handler
     function copyFromButton(btn) {
       const text = btn.getAttribute('data-copy') || '';
       const prev = btn.textContent;
@@ -130,7 +129,7 @@
         setTimeout(() => { btn.textContent = prev; btn.disabled = false; }, 1200);
       });
     }
-    window.copyFromButton = copyFromButton; // make available inside popup
+    window.copyFromButton = copyFromButton;
 
     function renderMarkers(filterText = '') {
       markerLayer.clearLayers();
@@ -152,34 +151,27 @@
     }
 
     // --- Papa Parse CSV Loader ---
-     Papa.parse("bmw_dealers.csv", {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function (results) {
-      results.data.forEach(function (r) {
-        // read fields in the SAME order as your header
-        const name  = (r.name || '').trim();
-        const state = (r.state || '').trim();
-        const code  = (r.dealer_code || '').trim();
-        const phone = (r.phone || '').trim();
-        const street = (r.street || '').trim();
-        const city   = (r.city || '').trim();
-        const zip    = (r.zip || '').trim();
-        const url    = (r.url || '').trim().replace(/\.*$/, ''); // strip trailing dot(s)
+    Papa.parse("bmw_dealers.csv", {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        results.data.forEach(function (r) {
+          const name   = (r.name || '').trim();
+          const state  = (r.state || '').trim();
+          const code   = (r.dealer_code || '').trim();
+          const phone  = (r.phone || '').trim();
+          const street = (r.street || '').trim();
+          const city   = (r.city || '').trim();
+          const zip    = (r.zip || '').trim();
+          const lat    = parseFloat(r.lat);
+          const lng    = parseFloat(r.lng);
+          const url    = (r.url || '').trim();
 
-        const fixed = fixLatLng(r.lat, r.lng);
-        if (!name || !fixed) return;
-
-        // IMPORTANT: pass args in this order
-        addPoint(lat, lng, name, street, city, state, zip, phone, code, url);
-      });
-
-      renderMarkers();
-      if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
-    }
-  });
-</script>
+          if (name && !isNaN(lat) && !isNaN(lng)) {
+            addPoint(lat, lng, name, state, code, phone, street, city, zip, url);
+          }
+        });
 
         renderMarkers();
         if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
