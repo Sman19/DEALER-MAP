@@ -73,29 +73,30 @@
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
-   function addPoint(lat, lng, name, state = '', code = '', phone = '', url = '') {
+  function addPoint(lat, lng, name, state = '', code = '', phone = '', address = '', url = '') {
   const popupHtml = `
     <div class="tooltip-title">${name}</div>
-    ${state ? `<div><b>State:</b> ${state}</div>` : ''}
-    ${code  ? `<div><b>Dealer Code:</b> ${code}</div>` : ''}
-    ${phone ? `<div><b>Phone:</b> ${phone}</div>` : ''}
-    ${url   ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
+    ${address ? `<div>${address}</div>` : ''}
+    ${phone   ? `<div><b>Phone:</b> ${phone}</div>` : ''}
+    ${code    ? `<div><b>Dealer Code:</b> ${code}</div>` : ''}
+    ${url     ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
   `;
 
   const m = L.circleMarker([lat, lng], {
     radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
   }).bindPopup(popupHtml);
 
-      m.meta = {
-        name: (name||'').toLowerCase(),
-        state: (state||'').toLowerCase(),
-        code: (code||'').toLowerCase(),
-        phone: (phone||'').toLowerCase()
-      };
+  m.meta = {
+    name: (name||'').toLowerCase(),
+    state: (state||'').toLowerCase(),
+    code: (code||'').toLowerCase(),
+    phone: (phone||'').toLowerCase(),
+    address: (address||'').toLowerCase()
+  };
 
-      allMarkers.push(m);
-      bounds.extend([lat, lng]);
-    }
+  allMarkers.push(m);
+  bounds.extend([lat, lng]);
+}
 
     function renderMarkers(filterText = '') {
       markerLayer.clearLayers();
@@ -118,28 +119,29 @@
 
     // --- Papa Parse CSV Loader ---
       Papa.parse("bmw_dealers.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: function(results) {
-        results.data.forEach(function(r) {
-        const name  = (r.name || '').trim();
-        const state = (r.state || '').trim();
-        const code  = (r.dealer_code || '').trim();
-        const phone = (r.phone || '').trim();
-        const lat   = parseFloat(r.lat);
-        const lng   = parseFloat(r.lng);
-        const url   = (r.url || '').trim();
+  download: true,
+  header: true,
+  skipEmptyLines: true,
+  complete: function(results) {
+    results.data.forEach(function(r) {
+      const name    = (r.name || '').trim();
+      const state   = (r.state || '').trim();
+      const code    = (r.dealer_code || '').trim();
+      const phone   = (r.phone || '').trim();
+      const address = (r.address || '').trim();
+      const lat     = parseFloat(r.lat);
+      const lng     = parseFloat(r.lng);
+      const url     = (r.url || '').trim();
 
-        if (name && !isNaN(lat) && !isNaN(lng)) {
-        addPoint(lat, lng, name, state, code, phone, url);
-        }
-        });
-
-        renderMarkers();
-        if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+      if (name && !isNaN(lat) && !isNaN(lng)) {
+        addPoint(lat, lng, name, state, code, phone, address, url);
       }
     });
+
+    renderMarkers();
+    if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+  }
+});
 
     // --- Search & Reset ---
     searchInput.addEventListener('input', e => renderMarkers(e.target.value));
