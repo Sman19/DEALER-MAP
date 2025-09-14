@@ -94,30 +94,30 @@
     const totalCount = document.getElementById('totalCount');
 
     function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
-      const popupHtml = `
-        <div class="tooltip-title">${name}</div>
-        <div>${street}</div>
-        <div>${city}, ${state} ${zip}</div>
-        <div><b>Phone:</b> ${phone} &nbsp; <b>Dealer Code:</b> ${code}</div>
-        ${url ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
-        <button class="copy-btn" onclick="copyAddress('${street}', '${city}', '${state}', '${zip}', '${phone}')">Copy Address</button>
-        <span class="copy-confirm">Copied!</span>
-      `;
+  const popupHtml = `
+    <div class="tooltip-title">${name}</div>
+    <div>${street}</div>
+    <div>${city}, ${state}</div>
+    <div><b>Phone:</b> ${phone} &nbsp;&nbsp; <b>Zip:</b> ${zip}</div>
+    <div><b>Dealer Code:</b> ${code}</div>
+    ${url ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
+    <button class="copy-btn" onclick="copyAddress('${street}', '${city}', '${state}', '${zip}', '${phone}')">Copy Address</button>
+  `;
 
-      const m = L.circleMarker([lat, lng], {
-        radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
-      }).bindPopup(popupHtml);
+  const m = L.circleMarker([lat, lng], {
+    radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
+  }).bindPopup(popupHtml);
 
-      m.meta = {
-        name: (name||'').toLowerCase(),
-        state: (state||'').toLowerCase(),
-        code: (code||'').toLowerCase(),
-        phone: (phone||'').toLowerCase()
-      };
+  m.meta = {
+    name: (name||'').toLowerCase(),
+    state: (state||'').toLowerCase(),
+    code: (code||'').toLowerCase(),
+    phone: (phone||'').toLowerCase()
+  };
 
-      allMarkers.push(m);
-      bounds.extend([lat, lng]);
-    }
+  allMarkers.push(m);
+  bounds.extend([lat, lng]);
+}
 
     // JS function for copying
     function copyAddress(street, city, state, zip, phone) {
