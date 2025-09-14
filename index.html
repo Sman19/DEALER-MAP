@@ -73,13 +73,14 @@
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
-  function addPoint(lat, lng, name, state = '', code = '', phone = '', address = '', url = '') {
+  function addPoint(lat, lng, name, state = '', code = '', phone = '', street = '', city = '', zip = '', url = '') {
   const popupHtml = `
     <div class="tooltip-title">${name}</div>
-    ${address ? `<div>${address}</div>` : ''}
-    ${phone   ? `<div><b>Phone:</b> ${phone}</div>` : ''}
-    ${code    ? `<div><b>Dealer Code:</b> ${code}</div>` : ''}
-    ${url     ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
+    ${street ? `<div>${street}</div>` : ''}
+    ${(city || state) ? `<div>${city}${city && state ? ', ' : ''}${state}</div>` : ''}
+    ${(phone || zip) ? `<div>${phone ? `<b>Phone:</b> ${phone}` : ''} ${zip ? `&nbsp;&nbsp;<b>Zip:</b> ${zip}` : ''}</div>` : ''}
+    ${code ? `<div><b>Dealer Code:</b> ${code}</div>` : ''}
+    ${url ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
   `;
 
   const m = L.circleMarker([lat, lng], {
@@ -91,7 +92,8 @@
     state: (state||'').toLowerCase(),
     code: (code||'').toLowerCase(),
     phone: (phone||'').toLowerCase(),
-    address: (address||'').toLowerCase()
+    city: (city||'').toLowerCase(),
+    zip: (zip||'').toLowerCase()
   };
 
   allMarkers.push(m);
@@ -118,23 +120,25 @@
     }
 
     // --- Papa Parse CSV Loader ---
-      Papa.parse("bmw_dealers.csv", {
+     Papa.parse("bmw_dealers.csv", {
   download: true,
   header: true,
   skipEmptyLines: true,
   complete: function(results) {
     results.data.forEach(function(r) {
-      const name    = (r.name || '').trim();
-      const state   = (r.state || '').trim();
-      const code    = (r.dealer_code || '').trim();
-      const phone   = (r.phone || '').trim();
-      const address = (r.address || '').trim();
-      const lat     = parseFloat(r.lat);
-      const lng     = parseFloat(r.lng);
-      const url     = (r.url || '').trim();
+      const name   = (r.name || '').trim();
+      const state  = (r.state || '').trim();
+      const code   = (r.dealer_code || '').trim();
+      const phone  = (r.phone || '').trim();
+      const street = (r.street || '').trim();
+      const city   = (r.city || '').trim();
+      const zip    = (r.zip || '').trim();
+      const lat    = parseFloat(r.lat);
+      const lng    = parseFloat(r.lng);
+      const url    = (r.url || '').trim();
 
       if (name && !isNaN(lat) && !isNaN(lng)) {
-        addPoint(lat, lng, name, state, code, phone, address, url);
+        addPoint(lat, lng, name, state, code, phone, street, city, zip, url);
       }
     });
 
