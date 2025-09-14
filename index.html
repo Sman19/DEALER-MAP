@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BMW Dealers — US + Puerto Rico</title>
 
-  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -31,8 +30,6 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
     .tooltip-title { font-weight: 700; margin-bottom: 4px; font-size: 18px; }
-
-    /* Popup header with copy button at top-right */
     .popup-header {
       display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px;
     }
@@ -59,18 +56,11 @@
     <div>• Data file: <code>bmw_dealers.csv</code></div>
   </div>
 
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
-
-  <!-- Papa Parse (CSV parser) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <script>
-    // Map setup
     const map = L.map('map', { zoomControl: true }).setView([39.5, -98.35], 4);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'
@@ -87,7 +77,6 @@
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
     function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
-      // Copy text only includes: name, street, city+state, phone, zip
       const copyText = `${name}
 ${street}
 ${city}, ${state}
@@ -97,7 +86,7 @@ ${zip}`;
       const popupHtml = `
         <div class="popup-header">
           <div class="tooltip-title">${esc(name)}</div>
-          <button class="copy-btn" data-copy="${esc(copyText)}" onclick="copyFromButton(this)">Copy Address</button>
+          <button class="copy-btn" data-copy="${copyText.replace(/"/g, '&quot;')}" onclick="copyFromButton(this)">Copy Address</button>
         </div>
         <div>${esc(street)}</div>
         <div>${esc(city)}, ${esc(state)}</div>
@@ -121,7 +110,6 @@ ${zip}`;
       bounds.extend([lat, lng]);
     }
 
-    // Copy button handler
     function copyFromButton(btn) {
       const text = btn.getAttribute('data-copy') || '';
       const prev = btn.textContent;
@@ -152,7 +140,6 @@ ${zip}`;
       }
     }
 
-    // --- Papa Parse CSV Loader ---
     Papa.parse("bmw_dealers.csv", {
       download: true,
       header: true,
@@ -171,7 +158,6 @@ ${zip}`;
           const url    = (r.url || '').trim();
 
           if (name && !isNaN(lat) && !isNaN(lng)) {
-            // Pass arguments in correct order
             addPoint(lat, lng, name, street, city, state, zip, phone, code, url);
           }
         });
@@ -181,7 +167,6 @@ ${zip}`;
       }
     });
 
-    // --- Search & Reset ---
     searchInput.addEventListener('input', e => renderMarkers(e.target.value));
     document.getElementById('resetBtn').addEventListener('click', () => {
       searchInput.value = '';
