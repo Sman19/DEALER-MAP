@@ -1,4 +1,4 @@
-name,state,dealer_code,phone,street,city,zip,lat,lng,url
+name,street,city,state,zip,phone,dealer_code,lat,lng,url
 Bmw Of Anchorage,AK,28786,(877) 583-5028,61.1509,-149.8679,https://www.bmwofanchorage.com
 BMW of Montgomery,AL,29187,(800) 996-9705,32.366806,-86.299969,https://www.bmwofmontgomery.com/
 BMW of Birmingham,AL,21851,(866) 655-1204,33.518589,-86.810356,https://www.birminghambmw.com/
