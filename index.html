@@ -152,28 +152,34 @@
     }
 
     // --- Papa Parse CSV Loader ---
-    Papa.parse("bmw_dealers.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: function(results) {
-        results.data.forEach(function(r) {
-          const name   = (r.name || '').trim();
-          const state  = (r.state || '').trim();
-          const code   = (r.dealer_code || '').trim();
-          const phone  = (r.phone || '').trim();
-          const street = (r.street || '').trim();
-          const city   = (r.city || '').trim();
-          const zip    = (r.zip || '').trim();
-          const lat    = parseFloat(r.lat);
-          const lng    = parseFloat(r.lng);
-          const url    = (r.url || '').trim();
+     Papa.parse("bmw_dealers.csv", {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function (results) {
+      results.data.forEach(function (r) {
+        // read fields in the SAME order as your header
+        const name   = (r.name || '').trim();
+        const street = (r.street || '').trim();
+        const city   = (r.city || '').trim();
+        const state  = (r.state || '').trim();
+        const zip    = (r.zip || '').trim();
+        const phone  = (r.phone || '').trim();
+        const code   = (r.dealer_code || '').trim();
+        const url    = (r.url || '').trim().replace(/\.*$/, ''); // strip trailing dot(s)
 
-          if (name && !isNaN(lat) && !isNaN(lng)) {
-            // IMPORTANT: pass fields in the correct order for the popup layout
-            addPoint(lat, lng, name, street, city, state, zip, phone, code, url);
-          }
-        });
+        const fixed = fixLatLng(r.lat, r.lng);
+        if (!name || !fixed) return;
+
+        // IMPORTANT: pass args in this order
+        addPoint(fixed.lat, fixed.lng, name, street, city, state, zip, phone, code, url);
+      });
+
+      renderMarkers();
+      if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+    }
+  });
+</script>
 
         renderMarkers();
         if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
