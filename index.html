@@ -74,6 +74,9 @@
     const totalCount = document.getElementById('totalCount');
 
   function addPoint(lat, lng, name, state = '', code = '', phone = '', street = '', city = '', zip = '', url = '') {
+  // Build formatted address string for clipboard
+  const fullAddress = `${name}\n${street}\n${city}, ${state} ${zip}\nPhone: ${phone}`;
+
   const popupHtml = `
     <div class="tooltip-title">${name}</div>
     ${street ? `<div>${street}</div>` : ''}
@@ -81,6 +84,8 @@
     ${(phone || zip) ? `<div>${phone ? `<b>Phone:</b> ${phone}` : ''} ${zip ? `&nbsp;&nbsp;<b>Zip:</b> ${zip}` : ''}</div>` : ''}
     ${code ? `<div><b>Dealer Code:</b> ${code}</div>` : ''}
     ${url ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
+    <button class="copy-btn" onclick="copyAddress(\`${fullAddress.replace(/`/g, '\\`')}\`, this)">Copy Address</button>
+    <span class="copy-confirm" style="display:none; color:green; font-size:12px; margin-left:6px;">✔ Copied!</span>
   `;
 
   const m = L.circleMarker([lat, lng], {
@@ -98,6 +103,19 @@
 
   allMarkers.push(m);
   bounds.extend([lat, lng]);
+}
+
+// Copy to clipboard + show checkmark
+function copyAddress(text, btnEl) {
+  navigator.clipboard.writeText(text).then(() => {
+    const confirmEl = btnEl.nextElementSibling;
+    confirmEl.style.display = "inline";
+    setTimeout(() => {
+      confirmEl.style.display = "none";
+    }, 1500);
+  }).catch(err => {
+    console.error("Failed to copy address:", err);
+  });
 }
 
     function renderMarkers(filterText = '') {
