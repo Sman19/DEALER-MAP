@@ -32,6 +32,26 @@
     }
     .tooltip-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
     .count { font-weight: 600; }
+
+    /* Copy button styling */
+    .copy-btn {
+      margin-top: 6px;
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #f5f5f5;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .copy-btn:hover {
+      background: #e0e0e0;
+    }
+    .copy-confirm {
+      display: none;
+      color: green;
+      font-size: 12px;
+      margin-left: 6px;
+    }
   </style>
 </head>
 <body>
@@ -46,7 +66,7 @@
   <div class="legend">
     <div><span class="count" id="totalCount">0</span> BMW dealers loaded</div>
     <div>• Click a dot to see details</div>
-    <div>• Data file: <code>bmw_dealers.CSV</code></div>
+    <div>• Data file: <code>bmw_dealers.csv</code></div>
   </div>
 
   <!-- Leaflet JS -->
@@ -56,7 +76,7 @@
     crossorigin=""
   ></script>
 
-    <!-- Papa Parse (CSV parser) -->
+  <!-- Papa Parse (CSV parser) -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <script>
@@ -73,48 +93,45 @@
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
-  function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
-  const addressText = `${street}, ${city}, ${state} ${zip}`;
+    function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
+      const popupHtml = `
+        <div class="tooltip-title">${name}</div>
+        <div>${street}</div>
+        <div>${city}, ${state} ${zip}</div>
+        <div><b>Phone:</b> ${phone} &nbsp; <b>Dealer Code:</b> ${code}</div>
+        ${url ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
+        <button class="copy-btn" onclick="copyAddress('${street}', '${city}', '${state}', '${zip}', '${phone}')">Copy Address</button>
+        <span class="copy-confirm">Copied!</span>
+      `;
 
-  const popupHtml = `
-    <div class="tooltip-title">${name}</div>
-    <div>${street}</div>
-    <div>${city}, ${state} ${zip}</div>
-    <div><b>Phone:</b> ${phone} &nbsp; <b>Dealer Code:</b> ${code}</div>
-    ${url ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
-    <button class="copy-btn" onclick="copyAddress('${street}', '${city}', '${state}', '${zip}', '${phone}')">Copy Address</button>
-    <span class="copy-confirm">Copied!</span>
-  `;
+      const m = L.circleMarker([lat, lng], {
+        radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
+      }).bindPopup(popupHtml);
 
-  const m = L.circleMarker([lat, lng], {
-    radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
-  }).bindPopup(popupHtml);
+      m.meta = {
+        name: (name||'').toLowerCase(),
+        state: (state||'').toLowerCase(),
+        code: (code||'').toLowerCase(),
+        phone: (phone||'').toLowerCase()
+      };
 
-  m.meta = {
-    name: (name||'').toLowerCase(),
-    state: (state||'').toLowerCase(),
-    code: (code||'').toLowerCase(),
-    phone: (phone||'').toLowerCase()
-  };
-
-  allMarkers.push(m);
-  bounds.extend([lat, lng]);
-}
-
-// JS function for copying
-function copyAddress(street, city, state, zip, phone) {
-  const text = `${street}\n${city}, ${state} ${zip}\n${phone}`;
-  navigator.clipboard.writeText(text).then(() => {
-    const confirms = document.getElementsByClassName("copy-confirm");
-    if (confirms.length > 0) {
-      confirms[confirms.length - 1].style.display = "inline";
-      setTimeout(() => {
-        confirms[confirms.length - 1].style.display = "none";
-      }, 1500);
+      allMarkers.push(m);
+      bounds.extend([lat, lng]);
     }
-  });
-}
-___________________________________________ADDPOINT^______________
+
+    // JS function for copying
+    function copyAddress(street, city, state, zip, phone) {
+      const text = `${street}\n${city}, ${state} ${zip}\n${phone}`;
+      navigator.clipboard.writeText(text).then(() => {
+        const confirms = document.getElementsByClassName("copy-confirm");
+        if (confirms.length > 0) {
+          const el = confirms[confirms.length - 1];
+          el.style.display = "inline";
+          setTimeout(() => { el.style.display = "none"; }, 1500);
+        }
+      });
+    }
+
     function renderMarkers(filterText = '') {
       markerLayer.clearLayers();
       const f = (filterText||'').trim().toLowerCase();
@@ -135,45 +152,33 @@ ___________________________________________ADDPOINT^______________
     }
 
     // --- Papa Parse CSV Loader ---
-     Papa.parse("bmw_dealers.csv", {
-  download: true,
-  header: true,
-  skipEmptyLines: true,
-  complete: function(results) {
-    results.data.forEach(function(r) {
-      const name   = (r.name || '').trim();
-      const state  = (r.state || '').trim();
-      const code   = (r.dealer_code || '').trim();
-      const phone  = (r.phone || '').trim();
-      const street = (r.street || '').trim();
-      const city   = (r.city || '').trim();
-      const zip    = (r.zip || '').trim();
-      const lat    = parseFloat(r.lat);
-      const lng    = parseFloat(r.lng);
-      const url    = (r.url || '').trim();
+    Papa.parse("bmw_dealers.csv", {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        results.data.forEach(function(r) {
+          const name   = (r.name || '').trim();
+          const state  = (r.state || '').trim();
+          const code   = (r.dealer_code || '').trim();
+          const phone  = (r.phone || '').trim();
+          const street = (r.street || '').trim();
+          const city   = (r.city || '').trim();
+          const zip    = (r.zip || '').trim();
+          const lat    = parseFloat(r.lat);
+          const lng    = parseFloat(r.lng);
+          const url    = (r.url || '').trim();
 
-      if (name && !isNaN(lat) && !isNaN(lng)) {
-        addPoint(lat, lng, name, state, code, phone, street, city, zip, url);
+          if (name && !isNaN(lat) && !isNaN(lng)) {
+            // ✅ Correct order
+            addPoint(lat, lng, name, street, city, state, zip, phone, code, url);
+          }
+        });
+
+        renderMarkers();
+        if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
       }
     });
-
-    renderMarkers();
-    if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
-  }
-});
-// --- COPY BUTTON ---
-    .copy-btn {
-  margin-top: 6px;
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-size: 12px;
-}
-.copy-btn:hover {
-  background: #e0e0e0;
-}
 
     // --- Search & Reset ---
     searchInput.addEventListener('input', e => renderMarkers(e.target.value));
@@ -183,3 +188,5 @@ ___________________________________________ADDPOINT^______________
       if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
     });
   </script>
+</body>
+</html>
