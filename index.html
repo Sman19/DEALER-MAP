@@ -93,7 +93,7 @@
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
-    function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
+   function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
   const popupHtml = `
     <div class="tooltip-title">${name}</div>
     <div>${street}</div>
@@ -101,7 +101,7 @@
     <div><b>Phone:</b> ${phone} &nbsp;&nbsp; <b>Zip:</b> ${zip}</div>
     <div><b>Dealer Code:</b> ${code}</div>
     ${url ? `<div><a href="${url}" target="_blank">Visit Website</a></div>` : ''}
-    <button class="copy-btn" onclick="copyAddress('${street}', '${city}', '${state}', '${zip}', '${phone}')">Copy Address</button>
+    <button class="copy-btn" onclick="copyAddress('${street}', '${city}', '${state}', '${zip}', '${phone}', '${code}')">Copy Address</button>
   `;
 
   const m = L.circleMarker([lat, lng], {
@@ -119,18 +119,19 @@
   bounds.extend([lat, lng]);
 }
 
-    // JS function for copying
-    function copyAddress(street, city, state, zip, phone) {
-      const text = `${street}\n${city}, ${state} ${zip}\n${phone}`;
-      navigator.clipboard.writeText(text).then(() => {
-        const confirms = document.getElementsByClassName("copy-confirm");
-        if (confirms.length > 0) {
-          const el = confirms[confirms.length - 1];
-          el.style.display = "inline";
-          setTimeout(() => { el.style.display = "none"; }, 1500);
-        }
-      });
+// Fix copy format too
+function copyAddress(street, city, state, zip, phone, code) {
+  const text = `${street}\n${city}, ${state}\n${phone}, ${zip}\nDealer Code: ${code}`;
+  navigator.clipboard.writeText(text).then(() => {
+    const confirms = document.getElementsByClassName("copy-confirm");
+    if (confirms.length > 0) {
+      confirms[confirms.length - 1].style.display = "inline";
+      setTimeout(() => {
+        confirms[confirms.length - 1].style.display = "none";
+      }, 1500);
     }
+  });
+}
 
     function renderMarkers(filterText = '') {
       markerLayer.clearLayers();
