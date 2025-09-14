@@ -159,13 +159,13 @@
     complete: function (results) {
       results.data.forEach(function (r) {
         // read fields in the SAME order as your header
-        const name   = (r.name || '').trim();
+        const name  = (r.name || '').trim();
+        const state = (r.state || '').trim();
+        const code  = (r.dealer_code || '').trim();
+        const phone = (r.phone || '').trim();
         const street = (r.street || '').trim();
         const city   = (r.city || '').trim();
-        const state  = (r.state || '').trim();
         const zip    = (r.zip || '').trim();
-        const phone  = (r.phone || '').trim();
-        const code   = (r.dealer_code || '').trim();
         const url    = (r.url || '').trim().replace(/\.*$/, ''); // strip trailing dot(s)
 
         const fixed = fixLatLng(r.lat, r.lng);
