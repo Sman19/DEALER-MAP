@@ -86,35 +86,40 @@
     const esc = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
-    function addPoint(lat, lng, name, state = '', code = '', phone = '', street = '', city = '', zip = '', url = '') {
-      const copyText = `${street}\n${city}, ${state} ${zip}\n${phone}\nDealer Code: ${code}`;
+    function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
+  // Build clean copy text (no dealer code)
+  const copyText = `${name}
+${street}
+${city}, ${state}
+${phone}
+${zip}`;
 
-      const popupHtml = `
-        <div class="popup-header">
-          <div class="tooltip-title">${esc(name)}</div>
-          <button class="copy-btn" data-copy="${esc(copyText)}" onclick="copyFromButton(this)">Copy Address</button>
-        </div>
-        <div>${esc(street)}</div>
-        <div>${esc(city)}, ${esc(state)}</div>
-        <div><b>Phone:</b> ${esc(phone)} &nbsp;&nbsp; <b>Zip:</b> ${esc(zip)}</div>
-        <div><b>Dealer Code:</b> ${esc(code)}</div>
-        ${url ? `<div><a href="${esc(url)}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
-      `;
+  const popupHtml = `
+    <div class="popup-header">
+      <div class="tooltip-title">${esc(name)}</div>
+      <button class="copy-btn" data-copy="${esc(copyText)}" onclick="copyFromButton(this)">Copy Address</button>
+    </div>
+    <div>${esc(street)}</div>
+    <div>${esc(city)}, ${esc(state)}</div>
+    <div><b>Phone:</b> ${esc(phone)} &nbsp;&nbsp; <b>Zip:</b> ${esc(zip)}</div>
+    <div><b>Dealer Code:</b> ${esc(code)}</div>
+    ${url ? `<div><a href="${esc(url)}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
+  `;
 
-      const m = L.circleMarker([lat, lng], {
-        radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
-      }).bindPopup(popupHtml);
+  const m = L.circleMarker([lat, lng], {
+    radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
+  }).bindPopup(popupHtml);
 
-      m.meta = {
-        name: (name||'').toLowerCase(),
-        state: (state||'').toLowerCase(),
-        code: (code||'').toLowerCase(),
-        phone: (phone||'').toLowerCase()
-      };
+  m.meta = {
+    name: (name||'').toLowerCase(),
+    state: (state||'').toLowerCase(),
+    code: (code||'').toLowerCase(),
+    phone: (phone||'').toLowerCase()
+  };
 
-      allMarkers.push(m);
-      bounds.extend([lat, lng]);
-    }
+  allMarkers.push(m);
+  bounds.extend([lat, lng]);
+}
 
     // Copy button handler
     function copyFromButton(btn) {
