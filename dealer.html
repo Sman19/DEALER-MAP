@@ -5,40 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BMW Dealers — US + Puerto Rico</title>
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <style>
     html, body { height: 100%; margin: 0; }
     #map { height: 100vh; width: 100vw; }
+
     .controls {
-      position: absolute; top: 12px; left: 12px; z-index: 1000;
-      background: #fff; padding: 8px 10px; border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15); display: flex; gap: 8px; align-items: center;
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      background: #fff;
+      padding: 8px 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      display: flex;
+      gap: 8px;
+      align-items: center;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
-    .controls input { padding: 6px 8px; border-radius: 8px; border: 1px solid #ddd; width: 260px; }
-    .controls button { padding: 6px 10px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; background: #f6f6f6; }
+
+    .controls input {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      width: 260px;
+    }
+
+    .controls button {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      background: #f6f6f6;
+    }
+
     .legend {
-      position: absolute; bottom: 12px; left: 12px; z-index: 1000;
-      background: #fff; padding: 8px 10px; border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15); font-size: 13px; line-height: 1.35;
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      z-index: 1000;
+      background: #fff;
+      padding: 8px 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      font-size: 13px;
+      line-height: 1.35;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
-    .tooltip-title { font-weight: 700; margin-bottom: 4px; font-size: 18px; }
+
+    .tooltip-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-size: 18px;
+    }
+
     .popup-header {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
     }
+
     .copy-btn {
-      padding: 6px 10px; border: 1px solid #ddd; border-radius: 8px;
-      background: #f6f6f6; cursor: pointer; font-size: 12px; white-space: nowrap;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f6f6f6;
+      cursor: pointer;
+      font-size: 12px;
+      white-space: nowrap;
     }
-    .copy-btn:hover { background: #eee; }
-    .count { font-weight: 600; }
+
+    .copy-btn:hover {
+      background: #eee;
+    }
+
+    .count {
+      font-weight: 600;
+    }
+
+    .dealer-marker {
+      width: 10px;
+      height: 10px;
+      background: #1a1a1a;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+    }
+
+    .maplibregl-popup-content {
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      min-width: 250px;
+    }
   </style>
 </head>
 <body>
@@ -56,87 +121,138 @@
     <div>• Data file: <code>bmw_dealers.csv</code></div>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
   <script>
-    const map = L.map('map', { zoomControl: true }).setView([39.5, -98.35], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: 'https://demotiles.maplibre.org/style.json',
+      center: [-98.35, 39.5],
+      zoom: 3.5
+    });
 
-    const markerLayer = L.layerGroup().addTo(map);
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
     const allMarkers = [];
-    const bounds = L.latLngBounds([]);
+    const allPoints = [];
+
     const searchInput = document.getElementById('search');
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
-    const esc = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    const esc = (s) => String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
 
-    function addPoint(lat, lng, name, street = '', city = '', state = '', zip = '', phone = '', code = '', url = '') {
+    function copyFromButton(btn) {
+      const text = btn.getAttribute('data-copy') || '';
+      const prev = btn.textContent;
+      btn.disabled = true;
+
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = prev;
+          btn.disabled = false;
+        }, 1200);
+      }).catch(() => {
+        btn.textContent = 'Failed';
+        setTimeout(() => {
+          btn.textContent = prev;
+          btn.disabled = false;
+        }, 1200);
+      });
+    }
+
+    window.copyFromButton = copyFromButton;
+
+    function makePopupHtml(name, street, city, state, zip, phone, code, url) {
       const copyText = `${name}
 ${street}
 ${city}, ${state}
 ${phone}
 ${zip}`;
 
-      const popupHtml = `
+      return `
         <div class="popup-header">
           <div class="tooltip-title">${esc(name)}</div>
-          <button class="copy-btn" data-copy="${copyText.replace(/"/g, '&quot;')}" onclick="copyFromButton(this)">Copy Address</button>
+          <button class="copy-btn" data-copy="${esc(copyText)}" onclick="copyFromButton(this)">Copy Address</button>
         </div>
         <div>${esc(street)}</div>
         <div>${esc(city)}, ${esc(state)}</div>
         <div><b>Phone:</b> ${esc(phone)} &nbsp;&nbsp; <b>Zip:</b> ${esc(zip)}</div>
         <div><b>Dealer Code:</b> ${esc(code)}</div>
-        ${url ? `<div><a href="${esc(url)}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
+        ${url ? `<div style="margin-top:6px;"><a href="${esc(url)}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
       `;
+    }
 
-      const m = L.circleMarker([lat, lng], {
-        radius: 5, weight: 1, opacity: 1, fillOpacity: 0.85
-      }).bindPopup(popupHtml);
+    function createMarker(record) {
+      const el = document.createElement('div');
+      el.className = 'dealer-marker';
 
-      m.meta = {
-        name: (name||'').toLowerCase(),
-        state: (state||'').toLowerCase(),
-        code: (code||'').toLowerCase(),
-        phone: (phone||'').toLowerCase()
+      const popup = new maplibregl.Popup({ offset: 14 }).setHTML(
+        makePopupHtml(
+          record.name,
+          record.street,
+          record.city,
+          record.state,
+          record.zip,
+          record.phone,
+          record.code,
+          record.url
+        )
+      );
+
+      const marker = new maplibregl.Marker(el)
+        .setLngLat([record.lng, record.lat])
+        .setPopup(popup)
+        .addTo(map);
+
+      marker.meta = {
+        name: (record.name || '').toLowerCase(),
+        state: (record.state || '').toLowerCase(),
+        code: (record.code || '').toLowerCase(),
+        phone: (record.phone || '').toLowerCase()
       };
 
-      allMarkers.push(m);
-      bounds.extend([lat, lng]);
+      marker.raw = record;
+      allMarkers.push(marker);
+      allPoints.push([record.lng, record.lat]);
     }
 
-    function copyFromButton(btn) {
-      const text = btn.getAttribute('data-copy') || '';
-      const prev = btn.textContent;
-      btn.disabled = true;
-      navigator.clipboard.writeText(text).then(() => {
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = prev; btn.disabled = false; }, 1200);
+    function getVisibleMarkers(filterText = '') {
+      const f = (filterText || '').trim().toLowerCase();
+
+      return allMarkers.filter(marker => {
+        return !f ||
+          marker.meta.name.includes(f) ||
+          marker.meta.state.includes(f) ||
+          marker.meta.code.includes(f) ||
+          marker.meta.phone.includes(f);
       });
     }
-    window.copyFromButton = copyFromButton;
+
+    function fitToMarkers(markers) {
+      if (!markers.length) return;
+
+      const bounds = new maplibregl.LngLatBounds();
+      markers.forEach(marker => bounds.extend(marker.getLngLat()));
+      map.fitBounds(bounds, { padding: 40, maxZoom: 10 });
+    }
 
     function renderMarkers(filterText = '') {
-      markerLayer.clearLayers();
-      const f = (filterText||'').trim().toLowerCase();
-      let visible = 0;
+      const visibleMarkers = getVisibleMarkers(filterText);
 
-      for (const m of allMarkers) {
-        const hit = !f || m.meta.name.includes(f) || m.meta.state.includes(f) ||
-                    m.meta.code.includes(f) || m.meta.phone.includes(f);
-        if (hit) { m.addTo(markerLayer); visible++; }
-      }
+      allMarkers.forEach(marker => marker.remove());
 
-      shownCount.textContent = `${visible} shown`;
+      visibleMarkers.forEach(marker => marker.addTo(map));
+
+      shownCount.textContent = `${visibleMarkers.length} shown`;
       totalCount.textContent = allMarkers.length;
 
-      if (visible > 0) {
-        try { map.fitBounds(markerLayer.getBounds().pad(0.2)); } catch {}
+      if (visibleMarkers.length > 0) {
+        fitToMarkers(visibleMarkers);
       }
     }
 
@@ -144,8 +260,8 @@ ${zip}`;
       download: true,
       header: true,
       skipEmptyLines: true,
-      complete: function (results) {
-        results.data.forEach(function (r) {
+      complete: function(results) {
+        results.data.forEach(function(r) {
           const name   = (r.name || '').trim();
           const state  = (r.state || '').trim();
           const code   = (r.dealer_code || '').trim();
@@ -158,20 +274,48 @@ ${zip}`;
           const url    = (r.url || '').trim();
 
           if (name && !isNaN(lat) && !isNaN(lng)) {
-            addPoint(lat, lng, name, street, city, state, zip, phone, code, url);
+            createMarker({
+              name,
+              state,
+              code,
+              phone,
+              street,
+              city,
+              zip,
+              lat,
+              lng,
+              url
+            });
           }
         });
 
+        totalCount.textContent = allMarkers.length;
         renderMarkers();
-        if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+
+        if (allPoints.length) {
+          const bounds = new maplibregl.LngLatBounds();
+          allPoints.forEach(pt => bounds.extend(pt));
+          map.fitBounds(bounds, { padding: 40 });
+        }
+      },
+      error: function(err) {
+        console.error("CSV load error:", err);
       }
     });
 
-    searchInput.addEventListener('input', e => renderMarkers(e.target.value));
-    document.getElementById('resetBtn').addEventListener('click', () => {
+    searchInput.addEventListener('input', function(e) {
+      renderMarkers(e.target.value);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
       searchInput.value = '';
       renderMarkers();
-      if (bounds.isValid()) map.fitBounds(bounds.pad(0.2));
+
+      if (allPoints.length) {
+        const bounds = new maplibregl.LngLatBounds();
+        allPoints.forEach(pt => bounds.extend(pt));
+        map.fitBounds(bounds, { padding: 40 });
+      }
     });
   </script>
 </body>
