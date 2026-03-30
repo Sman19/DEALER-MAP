@@ -90,10 +90,10 @@
     }
 
     .dealer-marker {
-      width: 10px;
-      height: 10px;
-      background: #1a1a1a;
-      border: 1px solid #fff;
+      width: 12px;
+      height: 12px;
+      background: #111;
+      border: 2px solid #fff;
       border-radius: 50%;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
     }
@@ -124,7 +124,7 @@
   <script>
     const map = new maplibregl.Map({
       container: 'map',
-      style: 'https://demotiles.maplibre.org/style.json',
+      style: 'https://tiles.openfreemap.org/styles/bright',
       center: [-98.35, 39.5],
       zoom: 3.5
     });
@@ -245,7 +245,6 @@ ${zip}`;
       const visibleMarkers = getVisibleMarkers(filterText);
 
       allMarkers.forEach(marker => marker.remove());
-
       visibleMarkers.forEach(marker => marker.addTo(map));
 
       shownCount.textContent = `${visibleMarkers.length} shown`;
