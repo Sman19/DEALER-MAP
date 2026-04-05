@@ -35,12 +35,23 @@
       width: 260px;
     }
 
-    .controls button {
+    .controls button,
+    .home-btn {
       padding: 6px 10px;
       border-radius: 8px;
       border: 1px solid #ddd;
       cursor: pointer;
       background: #f6f6f6;
+      color: #111;
+      text-decoration: none;
+      font-size: 14px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      display: inline-block;
+    }
+
+    .controls button:hover,
+    .home-btn:hover {
+      background: #eee;
     }
 
     .legend {
@@ -110,6 +121,7 @@
   <div id="map"></div>
 
   <div class="controls">
+    <a href="index.html" class="home-btn" title="Go to Home">Home</a>
     <input id="search" type="text" placeholder="Search dealer / state / phone…" />
     <button id="resetBtn" title="Reset view">Reset</button>
     <span id="shownCount"></span>
