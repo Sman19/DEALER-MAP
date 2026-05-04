@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BMW Dealers — US + Puerto Rico</title>
 
-  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
-  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
   <style>
@@ -50,9 +48,7 @@
     }
 
     .controls button:hover,
-    .home-btn:hover {
-      background: #eee;
-    }
+    .home-btn:hover { background: #eee; }
 
     .legend {
       position: absolute;
@@ -92,31 +88,11 @@
       white-space: nowrap;
     }
 
-    .copy-btn:hover {
-      background: #eee;
-    }
-
-    .count {
-      font-weight: 600;
-    }
-
-    .dealer-marker {
-      width: 12px;
-      height: 12px;
-      background: #111;
-      border: 2px solid #fff;
-      border-radius: 50%;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
-    }
-
-    .maplibregl-popup-content {
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      min-width: 250px;
-    }
+    .copy-btn:hover { background: #eee; }
+    .count { font-weight: 600; }
   </style>
 </head>
+
 <body>
   <div id="map"></div>
 
@@ -129,19 +105,13 @@
 
   <div class="legend">
     <div><span class="count" id="totalCount">0</span> BMW dealers loaded</div>
-    <div>• Click a dot to see details</div>
+    <div>• Click a marker to see details</div>
     <div>• Data file: <code>bmw_dealers.csv</code></div>
   </div>
 
   <script>
-    const map = new maplibregl.Map({
-      container: 'map',
-      style: 'https://tiles.openfreemap.org/styles/bright',
-      center: [-98.35, 39.5],
-      zoom: 3.5
-    });
-
-    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    let map;
+    let activeInfoWindow = null;
 
     const allMarkers = [];
     const allPoints = [];
@@ -187,24 +157,29 @@ ${phone}
 ${zip}`;
 
       return `
-        <div class="popup-header">
-          <div class="tooltip-title">${esc(name)}</div>
-          <button class="copy-btn" data-copy="${esc(copyText)}" onclick="copyFromButton(this)">Copy Address</button>
+        <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; min-width:250px;">
+          <div class="popup-header">
+            <div class="tooltip-title">${esc(name)}</div>
+            <button class="copy-btn" data-copy="${esc(copyText)}" onclick="copyFromButton(this)">Copy Address</button>
+          </div>
+          <div>${esc(street)}</div>
+          <div>${esc(city)}, ${esc(state)}</div>
+          <div><b>Phone:</b> ${esc(phone)} &nbsp;&nbsp; <b>Zip:</b> ${esc(zip)}</div>
+          <div><b>Dealer Code:</b> ${esc(code)}</div>
+          ${url ? `<div style="margin-top:6px;"><a href="${esc(url)}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
         </div>
-        <div>${esc(street)}</div>
-        <div>${esc(city)}, ${esc(state)}</div>
-        <div><b>Phone:</b> ${esc(phone)} &nbsp;&nbsp; <b>Zip:</b> ${esc(zip)}</div>
-        <div><b>Dealer Code:</b> ${esc(code)}</div>
-        ${url ? `<div style="margin-top:6px;"><a href="${esc(url)}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
       `;
     }
 
     function createMarker(record) {
-      const el = document.createElement('div');
-      el.className = 'dealer-marker';
+      const marker = new google.maps.Marker({
+        position: { lat: record.lat, lng: record.lng },
+        map,
+        title: record.name
+      });
 
-      const popup = new maplibregl.Popup({ offset: 14 }).setHTML(
-        makePopupHtml(
+      const infoWindow = new google.maps.InfoWindow({
+        content: makePopupHtml(
           record.name,
           record.street,
           record.city,
@@ -214,12 +189,13 @@ ${zip}`;
           record.code,
           record.url
         )
-      );
+      });
 
-      const marker = new maplibregl.Marker(el)
-        .setLngLat([record.lng, record.lat])
-        .setPopup(popup)
-        .addTo(map);
+      marker.addListener("click", () => {
+        if (activeInfoWindow) activeInfoWindow.close();
+        activeInfoWindow = infoWindow;
+        infoWindow.open(map, marker);
+      });
 
       marker.meta = {
         name: (record.name || '').toLowerCase(),
@@ -230,7 +206,7 @@ ${zip}`;
 
       marker.raw = record;
       allMarkers.push(marker);
-      allPoints.push([record.lng, record.lat]);
+      allPoints.push(marker.getPosition());
     }
 
     function getVisibleMarkers(filterText = '') {
@@ -248,16 +224,21 @@ ${zip}`;
     function fitToMarkers(markers) {
       if (!markers.length) return;
 
-      const bounds = new maplibregl.LngLatBounds();
-      markers.forEach(marker => bounds.extend(marker.getLngLat()));
-      map.fitBounds(bounds, { padding: 40, maxZoom: 10 });
+      const bounds = new google.maps.LatLngBounds();
+      markers.forEach(marker => bounds.extend(marker.getPosition()));
+
+      map.fitBounds(bounds);
+
+      google.maps.event.addListenerOnce(map, "bounds_changed", () => {
+        if (map.getZoom() > 10) map.setZoom(10);
+      });
     }
 
     function renderMarkers(filterText = '') {
       const visibleMarkers = getVisibleMarkers(filterText);
 
-      allMarkers.forEach(marker => marker.remove());
-      visibleMarkers.forEach(marker => marker.addTo(map));
+      allMarkers.forEach(marker => marker.setMap(null));
+      visibleMarkers.forEach(marker => marker.setMap(map));
 
       shownCount.textContent = `${visibleMarkers.length} shown`;
       totalCount.textContent = allMarkers.length;
@@ -267,52 +248,68 @@ ${zip}`;
       }
     }
 
-    Papa.parse("bmw_dealers.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: function(results) {
-        results.data.forEach(function(r) {
-          const name   = (r.name || '').trim();
-          const state  = (r.state || '').trim();
-          const code   = (r.dealer_code || '').trim();
-          const phone  = (r.phone || '').trim();
-          const street = (r.street || '').trim();
-          const city   = (r.city || '').trim();
-          const zip    = (r.zip || '').trim();
-          const lat    = parseFloat(r.lat);
-          const lng    = parseFloat(r.lng);
-          const url    = (r.url || '').trim();
+    function loadDealers() {
+      Papa.parse("bmw_dealers.csv", {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
 
-          if (name && !isNaN(lat) && !isNaN(lng)) {
-            createMarker({
-              name,
-              state,
-              code,
-              phone,
-              street,
-              city,
-              zip,
-              lat,
-              lng,
-              url
-            });
+        complete: function(results) {
+          results.data.forEach(function(r) {
+            const name   = (r.name || '').trim();
+            const state  = (r.state || '').trim();
+            const code   = (r.dealer_code || '').trim();
+            const phone  = (r.phone || '').trim();
+            const street = (r.street || '').trim();
+            const city   = (r.city || '').trim();
+            const zip    = (r.zip || '').trim();
+            const lat    = parseFloat(r.lat);
+            const lng    = parseFloat(r.lng);
+            const url    = (r.url || '').trim();
+
+            if (name && !isNaN(lat) && !isNaN(lng)) {
+              createMarker({
+                name,
+                state,
+                code,
+                phone,
+                street,
+                city,
+                zip,
+                lat,
+                lng,
+                url
+              });
+            }
+          });
+
+          totalCount.textContent = allMarkers.length;
+          renderMarkers();
+
+          if (allMarkers.length) {
+            fitToMarkers(allMarkers);
           }
-        });
+        },
 
-        totalCount.textContent = allMarkers.length;
-        renderMarkers();
-
-        if (allPoints.length) {
-          const bounds = new maplibregl.LngLatBounds();
-          allPoints.forEach(pt => bounds.extend(pt));
-          map.fitBounds(bounds, { padding: 40 });
+        error: function(err) {
+          console.error("CSV load error:", err);
         }
-      },
-      error: function(err) {
-        console.error("CSV load error:", err);
-      }
-    });
+      });
+    }
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 39.5, lng: -98.35 },
+        zoom: 3.5,
+        mapTypeControl: true,
+        streetViewControl: false,
+        fullscreenControl: true
+      });
+
+      loadDealers();
+    }
+
+    window.initMap = initMap;
 
     searchInput.addEventListener('input', function(e) {
       renderMarkers(e.target.value);
@@ -322,12 +319,14 @@ ${zip}`;
       searchInput.value = '';
       renderMarkers();
 
-      if (allPoints.length) {
-        const bounds = new maplibregl.LngLatBounds();
-        allPoints.forEach(pt => bounds.extend(pt));
-        map.fitBounds(bounds, { padding: 40 });
+      if (allMarkers.length) {
+        fitToMarkers(allMarkers);
       }
     });
+  </script>
+
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6wmsZHv6hoIzkt5eIcm5NVVqxQHoThcA&callback=initMap">
   </script>
 </body>
 </html>
