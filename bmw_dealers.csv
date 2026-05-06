@@ -1,6 +1,6 @@
 name,country,state,dealer_code,phone,street,city,zip,lat,lng,url
-BMW of Anchorage,U.S,AK,28786,(877) 583-5028,"6115 Old Seward Hwy","Anchorage","99518",61.217330720098374, -149.86966354806648,https://www.bmwofanchorage.com
-BMW of Montgomery,U.S,AL,731 Eastern Boulevard,Montgomery,36117,(800) 996-9705,32.369454491074386, -86.20875043241435,https://www.bmwofmontgomery.com/
+BMW of Anchorage,U.S,AK,28786,(877) 583-5028,"6115 Old Seward Hwy","Anchorage","99518-1804",61.217330720098374, -149.86966354806648,https://www.bmwofanchorage.com
+BMW of Montgomery,U.S,AL,731 Eastern Boulevard,Montgomery,36117-1998,(800) 996-9705,32.369454491074386, -86.20875043241435,https://www.bmwofmontgomery.com/
 BMW of Birmingham,U.S,AL,1000 Tom Williams Way,Irondale,35210,(205) 443-8698,33.5222139818395, -86.66341031702339,https://www.birminghambmw.com/
 Century BMW of Huntsville,U.S,AL,3810 University Dr NW,Huntsville,35816,(256) 536-3800,34.735790238296794, -86.62561324437355,https://www.centurybmwhuntsville.com/
 BMW of Tuscaloosa,U.S,AL,3537 Skyland Blvd E,Tuscaloosa,35405,(205) 345-9811,33.16921958691988, -87.4909135170378,https://www.bmwoftuscaloosa.com/
