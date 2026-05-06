@@ -34,9 +34,7 @@
       font-size: 14px;
     }
 
-    .controls input {
-      width: 260px;
-    }
+    .controls input { width: 260px; }
 
     .controls select {
       background: #fff;
@@ -265,7 +263,7 @@ ${zip}`;
       });
     }
 
-    function renderMarkers(filterText = '') {
+    function renderMarkers(filterText = '', shouldFit = false) {
       const visibleMarkers = getVisibleMarkers(filterText);
 
       allMarkers.forEach(marker => marker.setMap(null));
@@ -274,7 +272,7 @@ ${zip}`;
       shownCount.textContent = `${visibleMarkers.length} shown`;
       totalCount.textContent = allMarkers.length;
 
-      if (visibleMarkers.length > 0) {
+      if (shouldFit && visibleMarkers.length > 0) {
         fitToMarkers(visibleMarkers);
       }
     }
@@ -288,8 +286,8 @@ ${zip}`;
         complete: function(results) {
           results.data.forEach(function(r) {
             const name    = (r.name || '').trim();
-            const state   = (r.state || '').trim();
             const country = (r.country || '').trim();
+            const state   = (r.state || '').trim();
             const code    = (r.dealer_code || '').trim();
             const phone   = (r.phone || '').trim();
             const street  = (r.street || '').trim();
@@ -317,11 +315,7 @@ ${zip}`;
           });
 
           totalCount.textContent = allMarkers.length;
-          renderMarkers();
-
-          if (allMarkers.length) {
-            fitToMarkers(allMarkers);
-          }
+          renderMarkers('', true);
         },
 
         error: function(err) {
@@ -345,21 +339,17 @@ ${zip}`;
     window.initMap = initMap;
 
     searchInput.addEventListener('input', function(e) {
-      renderMarkers(e.target.value);
+      renderMarkers(e.target.value, false);
     });
 
     countryFilter.addEventListener('change', function() {
-      renderMarkers(searchInput.value);
+      renderMarkers(searchInput.value, true);
     });
 
     document.getElementById('resetBtn').addEventListener('click', function() {
       searchInput.value = '';
       countryFilter.value = '';
-      renderMarkers();
-
-      if (allMarkers.length) {
-        fitToMarkers(allMarkers);
-      }
+      renderMarkers('', true);
     });
   </script>
 
