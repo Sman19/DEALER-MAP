@@ -1,11 +1,11 @@
 name,country,state,dealer_code,phone,street,city,zip,lat,lng,url
 BMW of Anchorage,U.S,AK,28786,(877) 583-5028,"6115 Old Seward Hwy","Anchorage","99518-1804",61.217330720098374, -149.86966354806648,https://www.bmwofanchorage.com
-BMW of Montgomery,U.S,AL,731 Eastern Boulevard,Montgomery,36117-1998,(800) 996-9705,32.369454491074386, -86.20875043241435,https://www.bmwofmontgomery.com/
-BMW of Birmingham,U.S,AL,1000 Tom Williams Way,Irondale,35210-3451,(205) 443-8698,33.5222139818395, -86.66341031702339,https://www.birminghambmw.com/
-Century BMW of Huntsville,U.S,AL,3810 University Dr NW,Huntsville,35816-3142,(256) 536-3800,34.735790238296794, -86.62561324437355,https://www.centurybmwhuntsville.com/
-BMW of Tuscaloosa,U.S,AL,3537 Skyland Blvd E,Tuscaloosa,35405-4557,(205) 345-9811,33.16921958691988, -87.4909135170378,https://www.bmwoftuscaloosa.com/
-BMW of Mobile,U.S,AL,3025 Government Boulevard,Mobile,36606-2610,(251) 476-2550,30.65554772297209, -88.11512886316984,https://www.bmwofmobile.com/
-BMW of Little Rock,U.S,AR,4621 Colonel Glenn Plaza Dr,Little Rock,72210-2861,(501) 224-3200,34.7135525725245, -92.40469425930152,https://www.bmwoflittlerock.com/
+BMW of Montgomery,U.S,AL,xxxx,731 Eastern Boulevard,Montgomery,36117-1998,(800) 996-9705,32.369454491074386, -86.20875043241435,https://www.bmwofmontgomery.com/
+BMW of Birmingham,U.S,AL,xxxx,1000 Tom Williams Way,Irondale,35210-3451,(205) 443-8698,33.5222139818395, -86.66341031702339,https://www.birminghambmw.com/
+Century BMW of Huntsville,U.S,AL,xxxx,3810 University Dr NW,Huntsville,35816-3142,(256) 536-3800,34.735790238296794, -86.62561324437355,https://www.centurybmwhuntsville.com/
+BMW of Tuscaloosa,U.S,AL,xxxx,3537 Skyland Blvd E,Tuscaloosa,35405-4557,(205) 345-9811,33.16921958691988, -87.4909135170378,https://www.bmwoftuscaloosa.com/
+BMW of Mobile,U.S,AL,xxxx,3025 Government Boulevard,Mobile,36606-2610,(251) 476-2550,30.65554772297209, -88.11512886316984,https://www.bmwofmobile.com/
+BMW of Little Rock,U.S,AR,xxxx,4621 Colonel Glenn Plaza Dr,Little Rock,72210-2861,(501) 224-3200,34.7135525725245, -92.40469425930152,https://www.bmwoflittlerock.com/
 BMW of Northwest Arkansas,U.S,AR,31833,(888) 571-7341,2500 SE Moberly Ln,Bentonville,72712,36.34590309020861, -94.18444784232776,https://www.bmwofnwa.com/
 BMW Tucson,U.S,AZ,32082,(520) 549-2167,855 W Wetmore Rd,Tucson,85705,32.28589686893269, -110.98611759194274,https://www.bmwoftucson.com/
 Chapman BMW Chandler,U.S,AZ,10729,(480) 344-4269,7455 W Orchid Ln,Chandler,85226,33.32273367166705, -111.97103550353992,https://www.chapmanbmwchandler.com/
