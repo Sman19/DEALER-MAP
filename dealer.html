@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BMW Dealers — US + Puerto Rico</title>
+  <title>BMW Dealers — US + Canada</title>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
@@ -26,11 +26,21 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
 
-    .controls input {
+    .controls input,
+    .controls select {
       padding: 6px 8px;
       border-radius: 8px;
       border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    .controls input {
       width: 260px;
+    }
+
+    .controls select {
+      background: #fff;
+      cursor: pointer;
     }
 
     .controls button,
@@ -98,7 +108,15 @@
 
   <div class="controls">
     <a href="https://sman19.github.io/Active-Website/index.html" class="home-btn" title="Go to Home">Home</a>
-    <input id="search" type="text" placeholder="Search dealer / state / phone…" />
+
+    <input id="search" type="text" placeholder="Search dealer / state / country / phone…" />
+
+    <select id="countryFilter" title="Filter by country">
+      <option value="">All</option>
+      <option value="US">U.S.</option>
+      <option value="Canada">Canada</option>
+    </select>
+
     <button id="resetBtn" title="Reset view">Reset</button>
     <span id="shownCount"></span>
   </div>
@@ -117,6 +135,7 @@
     const allPoints = [];
 
     const searchInput = document.getElementById('search');
+    const countryFilter = document.getElementById('countryFilter');
     const shownCount = document.getElementById('shownCount');
     const totalCount = document.getElementById('totalCount');
 
@@ -149,10 +168,11 @@
 
     window.copyFromButton = copyFromButton;
 
-    function makePopupHtml(name, street, city, state, zip, phone, code, url) {
+    function makePopupHtml(name, street, city, state, country, zip, phone, code, url) {
       const copyText = `${name}
 ${street}
 ${city}, ${state}
+${country}
 ${phone}
 ${zip}`;
 
@@ -164,6 +184,7 @@ ${zip}`;
           </div>
           <div>${esc(street)}</div>
           <div>${esc(city)}, ${esc(state)}</div>
+          <div><b>Country:</b> ${esc(country)}</div>
           <div><b>Phone:</b> ${esc(phone)} &nbsp;&nbsp; <b>Zip:</b> ${esc(zip)}</div>
           <div><b>Dealer Code:</b> ${esc(code)}</div>
           ${url ? `<div style="margin-top:6px;"><a href="${esc(url)}" target="_blank" rel="noopener">Visit Website</a></div>` : ''}
@@ -184,6 +205,7 @@ ${zip}`;
           record.street,
           record.city,
           record.state,
+          record.country,
           record.zip,
           record.phone,
           record.code,
@@ -200,6 +222,7 @@ ${zip}`;
       marker.meta = {
         name: (record.name || '').toLowerCase(),
         state: (record.state || '').toLowerCase(),
+        country: (record.country || '').toLowerCase(),
         code: (record.code || '').toLowerCase(),
         phone: (record.phone || '').toLowerCase()
       };
@@ -211,13 +234,21 @@ ${zip}`;
 
     function getVisibleMarkers(filterText = '') {
       const f = (filterText || '').trim().toLowerCase();
+      const selectedCountry = (countryFilter.value || '').toLowerCase();
 
       return allMarkers.filter(marker => {
-        return !f ||
+        const matchesSearch =
+          !f ||
           marker.meta.name.includes(f) ||
           marker.meta.state.includes(f) ||
+          marker.meta.country.includes(f) ||
           marker.meta.code.includes(f) ||
           marker.meta.phone.includes(f);
+
+        const matchesCountry =
+          !selectedCountry || marker.meta.country === selectedCountry;
+
+        return matchesSearch && matchesCountry;
       });
     }
 
@@ -256,21 +287,23 @@ ${zip}`;
 
         complete: function(results) {
           results.data.forEach(function(r) {
-            const name   = (r.name || '').trim();
-            const state  = (r.state || '').trim();
-            const code   = (r.dealer_code || '').trim();
-            const phone  = (r.phone || '').trim();
-            const street = (r.street || '').trim();
-            const city   = (r.city || '').trim();
-            const zip    = (r.zip || '').trim();
-            const lat    = parseFloat(r.lat);
-            const lng    = parseFloat(r.lng);
-            const url    = (r.url || '').trim();
+            const name    = (r.name || '').trim();
+            const state   = (r.state || '').trim();
+            const country = (r.country || '').trim();
+            const code    = (r.dealer_code || '').trim();
+            const phone   = (r.phone || '').trim();
+            const street  = (r.street || '').trim();
+            const city    = (r.city || '').trim();
+            const zip     = (r.zip || '').trim();
+            const lat     = parseFloat(r.lat);
+            const lng     = parseFloat(r.lng);
+            const url     = (r.url || '').trim();
 
             if (name && !isNaN(lat) && !isNaN(lng)) {
               createMarker({
                 name,
                 state,
+                country,
                 code,
                 phone,
                 street,
@@ -315,8 +348,13 @@ ${zip}`;
       renderMarkers(e.target.value);
     });
 
+    countryFilter.addEventListener('change', function() {
+      renderMarkers(searchInput.value);
+    });
+
     document.getElementById('resetBtn').addEventListener('click', function() {
       searchInput.value = '';
+      countryFilter.value = '';
       renderMarkers();
 
       if (allMarkers.length) {
@@ -326,7 +364,7 @@ ${zip}`;
   </script>
 
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6wmsZHv6hoIzkt5eIcm5NVVqxQHoThcA&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=initMap">
   </script>
 </body>
 </html>
