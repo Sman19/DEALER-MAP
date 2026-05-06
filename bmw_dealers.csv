@@ -1,70 +1,70 @@
-name,state,dealer_code,phone,street,city,zip,lat,lng,url
-BMW of Anchorage,AK,28786,(877) 583-5028,"6115 Old Seward Hwy","Anchorage","99518",61.217330720098374, -149.86966354806648,https://www.bmwofanchorage.com
-BMW of Montgomery,AL,731 Eastern Boulevard,Montgomery,36117,(800) 996-9705,32.369454491074386, -86.20875043241435,https://www.bmwofmontgomery.com/
-BMW of Birmingham,AL,1000 Tom Williams Way,Irondale,35210,(205) 443-8698,33.5222139818395, -86.66341031702339,https://www.birminghambmw.com/
-Century BMW of Huntsville,AL,3810 University Dr NW,Huntsville,35816,(256) 536-3800,34.735790238296794, -86.62561324437355,https://www.centurybmwhuntsville.com/
-BMW of Tuscaloosa,AL,3537 Skyland Blvd E,Tuscaloosa,35405,(205) 345-9811,33.16921958691988, -87.4909135170378,https://www.bmwoftuscaloosa.com/
-BMW of Mobile,AL,3025 Government Boulevard,Mobile,36606,(251) 476-2550,30.65554772297209, -88.11512886316984,https://www.bmwofmobile.com/
-BMW of Little Rock,AR,4621 Colonel Glenn Plaza Dr,Little Rock,72210,(501) 224-3200,34.7135525725245, -92.40469425930152,https://www.bmwoflittlerock.com/
-BMW of Northwest Arkansas,AR,31833,(888) 571-7341,2500 SE Moberly Ln,Bentonville,72712,36.34590309020861, -94.18444784232776,https://www.bmwofnwa.com/
-BMW Tucson,AZ,32082,(520) 549-2167,855 W Wetmore Rd,Tucson,85705,32.28589686893269, -110.98611759194274,https://www.bmwoftucson.com/
-Chapman BMW Chandler,AZ,10729,(480) 344-4269,7455 W Orchid Ln,Chandler,85226,33.32273367166705, -111.97103550353992,https://www.chapmanbmwchandler.com/
-Chapman BMW On Camelback,AZ,10729,(602) 308-4269,1127 E Camelback Rd,Phoenix,85014,33.51047883881075, -112.0622634188768,https://www.chapmanbmwoncamelback.com/
-Arrowhead BMW,AZ,46886,(833) 700-1269,19205 N Loop 101 Frontage Rd,Glendale,85308,33.65901633694175, -112.23400127283719,https://www.arrowheadbmw.com/
-BMW North Scottsdale,AZ,20741,(877) 705-3224,18018 N Scottsdale Rd,Phoenix,85054,33.649116734742876, -111.92643564770707,https://www.bmwnorthscottsdale.com/
-Irvine BMW,CA,21188,(949) 649-8787,9881 Research Dr,Irvine,92618,33.63165793337103, -117.72569990352727,https://www.irvinebmw.com/
-BMW of Ontario,CA,34821,(909) 390-7888,1350 Auto Center Dr,Ontario,91761,34.04937539877247, -117.5458665151488,https://www.bmwofontario.com/
-BMW of Riverside,CA,40335,(951) 373-5000,3060 Adams St,Riverside,92504,33.923328733904654, -117.41690484399014,https://www.bmwofriverside.com/
-BMW Encinitas,CA,30956,(760) 753-6301,1302 Encinitas Blvd,Encinitas,92024,33.04657676205459, -117.26326051267236,https://www.autonation.com/
-BMW of Vista,CA,44610,(760) 305-5770,1715 Hacienda Dr,Vista,92081,33.179291,-117.239685,
-BMW of San Diego,CA,24335,(858) 560-5050,5090 Kearny Mesa Rd,San Diego,92111,32.82852762822794, -117.1441663900683,https://www.bmwofsandiego.com/
-BMW of Murrieta,CA,35744,(951) 249-8000,41430 Auto Mall Pkwy,Murrieta,92562,33.52945379392777, -117.17041885935082,https://www.bmwofmurrieta.com/
-BMW of Escondido,CA,51458,(760) 745-3000,1557 Auto Park Way N,Escondido,92029,33.11647551143201, -117.10923544402318,https://www.bmwofescondido.com/
-BMW of El Cajon,CA,32467,(619) 442-8888,720 El Cajon Blvd,El Cajon,92020,32.78791382301965, -116.97584937472548,https://www.bmwofelcajon.com/
-BMW of Palm Springs,CA,44427,(760) 324-7071,"3737 E Palm Canyon Dr","Palm Springs","92264-5205",33.795187209402485, -116.50444440352042,https://www.bmwofpalmsprings.com
-BMW of Humboldt Bay,CA,29869,(707) 839-4269,1795 Central Ave,McKinleyville,95519,40.938070781067594, -124.10015247436247,https://www.bmwofhumboldtbay.com/
-BMW of Visalia,CA,86335,(559) 732-4700,3365 N Demaree St,Visalia,93291,36.32979977009315, -119.39576990155952,https://www.bmwofvisalia.com/
-BMW Concord,CA,4497,(925) 682-3577,1967 Market St,Concord,37.97545786226334, -122.0445701051912,https://www.bmwconcord.com/
-Hansel BMW of Santa Rosa,CA,23779,(707) 578-4717,2925 Corby Ave,Santa Rosa,95407,38.40647244888878, -122.71705850146589,https://www.hanselbmwofsantarosa.com/
-Valley BMW,CA,21616,(209) 575-0269,4725 McHenry Ave,Modesto,95356,37.70840210703153, -120.99595597451457,https://www.valley-bmw.com/
-Crevier BMW,CA,36721,(657) 231-5040,1500 Auto Mall Dr,Santa Ana,92705,33.72793981035908, -117.83784750352335,https://www.crevierbmw.com/
-Niello BMW Sacramento,CA,4618,(916) 486-1011,2020 Fulton Ave,Sacramento,95825,38.60215318592758, -121.40073041680132,https://bmw.niello.com/
-BMW of Roseville,CA,4923,(916) 790-1990,110 Automall Dr,Roseville,95661,38.75151138315041, -121.25553794933603,https://www.bmwofroseville.com/
-BMW of Chico,CA,42367,(530) 893-1300,2520 Cohasset Rd,Chico,95973,39.78743735761354, -121.88943105722066,https://www.bmwofchico.com/
-BMW Fresno,CA,39315,(559) 447-6700,7171 N Palm Ave,Fresno,93650,36.8404007456713, -119.80893820165815,https://www.bmwfresno.com/
-Sterling BMW Newport Beach,CA,86513,(949) 645-5900,3000 W Coast Hwy,Newport Beach,92663,33.62148758414649, -117.92588604782276,https://www.sterlingbmw.com/
-BMW of Fairfield,CA,47859,(707) 402-1599,2855 Auto Mall Pkwy,Fairfield,94533,38.259079,-122.060402,https://www.bmwfairfield.com/
-BMW of Monrovia,CA,31642,(626) 358-4269,1425 S Mountain Ave,Monrovia,91016,34.1373576833138, -117.98693514232885,https://www.bmwofmonrovia.net/
-Valencia BMW,CA,22180,(661) 254-8000,23435 Valencia Blvd,Valencia,91355,34.42107787993354, -118.54889998826944,https://www.valenciabmw.com/
-Bob Smith BMW,CA,4637,(818) 346-3144,24500 Calabasas Rd,Calabasas,91302,34.14956293058092, -118.66127135944511,https://bobsmithbmw.com/
-Rusnak BMW,CA,86846,(805) 496-6500,3645 Auto Mall Dr,Thousand Oaks,91362,34.16299627844229, -118.83108719012922,https://www.rusnakbmw.com/
-BMW of Camarillo/Steve Thomas BMW,CA,17990,(805) 482-8878,411 Daily Dr,Camarillo,93010,34.2199741604052, -119.06433279012693,https://www.bmwofcamarillo.com/
-BMW of Bakersfield,CA,24781,(661) 396-4040,5400 Gasoline Alley Dr,Bakersfield,93313,35.30482733536447, -119.03430091534234,https://www.bmwofbakersfield.com/
-BMW Santa Barbara,CA,26718,(805) 682-2000,402 S Hope Ave,Santa Barbara,93105,34.43410059792072, -119.74622788826882,https://www.bmwsantabarbara.com/
-BMW of Santa Maria,CA,65734,(805) 614-0306,2150 S College Dr,Santa Maria,93455,34.92198402673174, -120.42429241153665,https://www.bmwsm.com/
-BMW of San Luis Obispo,CA,22820,(805) 543-4423,1401 Calle Joaquin,San Luis Obispo,35.2513717481605, -120.67963673850916,https://www.bmwofslo.com/
-Santa Monica BMW,CA,4660,(310) 829-3535,1127 Santa Monica Blvd,Santa Monica,90401,34.02285740986545, -118.48814221712155,https://www.smbmw.com/
-BMW of San Francisco,CA,49544,(415) 551-2639,1675 Howard St,San Francisco,94103,37.770845168757226, -122.41685008997231,https://www.bmwsf.com/
-East Bay BMW,CA,10731,(888) 593-7018,4350 Rosewood Dr,Pleasanton,94588,37.69987556169144, -121.8765199727842,https://www.eastbaybmw.com/
-BMW of Buena Park,CA,47046,(714) 598-3738,6750 Auto Center Dr,Buena Park,90621,33.8623401902663, -117.98857882082642,https://www.bmwbuenapark.com/
-BMW of Fremont,CA,24856,(510) 224-4820,5720 Cushing Pkwy,Fremont,94538,37.499015697760605, -121.97527238813554,https://www.bmwoffremont.com/
-BMW of Mountain View,CA,21618,(650) 943-1000,150 E El Camino Real,Mountain View,94040,37.3808633814288, -122.0715093746477,https://www.bmwofmountainview.com/
-Peter Pan BMW,CA,32652,(650) 349-9077,1625 Adrian Rd,Burlingame,94010,37.543405949364136, -122.30301281512007,https://www.peterpanbmw.com/
-Weatherford BMW of Berkley,CA,4514,(510) 654-8280,735 Ashby Ave,Berkeley,94710,37.8505247766516, -122.29448794394169,https://www.weatherfordbmw.com/
-BMW of San Rafael,CA,42869,(415) 482-2000,1599 Francisco Blvd E,San Rafael,94901,37.95146773278675, -122.49470943044389,https://www.bmwofsanrafael.com/
-Stevens Creek BMW,CA,22083,(408) 249-9070,4343 Stevens Creek Blvd,Santa Clara,95051,37.32419819443075, -121.97806666300612,https://www.stevenscreekbmw.com/
-BMW of Sherman Oaks,CA,47724,(818) 907-9995,5201 Van Nuys Blvd,Sherman Oaks,91401,34.165509972626154, -118.44925594834982,https://www.bmwshermanoaks.com/
-BMW of Monterey,CA,30822,(866) 299-5459,1 Geary Plaza,Seaside,93955,36.61455958253676, -121.84321765564117,https://www.bmwmonterey.com/
-Century West BMW,CA,20268,(818) 432-5800,4245 Lankershim Blvd,North Hollywood,91602,34.14719519825643, -118.36418916129449,https://www.centurywestbmw.com/
-McKenna BMW Norwalk,CA,96733,(562) 868-3233,10900 Firestone Blvd,Norwalk,90650,33.92311889975542, -118.10221695945454,https://www.mckennabmw.com/
-New Century BMW,CA,17966,(626) 570-8444,1139 W Main St,Alhambra,91801,34.09190867278375, -118.1349813766391,https://www.newcenturybmw.com/
-Long Beach BMW,CA,31643,(562) 427-5494,1660 E Spring St,Signal Hill,90755,33.811097445393294, -118.17094590548629,https://www.longbeachbmw.com/
-BMW of Downtown Los Angeles/Nick Alexander Imports,CA,4942,(323) 583-1901,6333 S Alameda St,Los Angeles,90001,33.98264949119104, -118.23662675205568,https://www.bmwdtla.com/
-BMW of San Francisco,CA,49544,(628) 221-7930,1675 Howard St,San Francisco,94103,37.77080276480308, -122.41675353045204,https://www.bmwsf.com/
-Beverly Hills BMW,CA,21390,(310) 358-7800,5070 Wilshire Blvd,Los Angeles,90036,34.06205453544053, -118.34009806129791,https://www.bmwofbeverlyhills.com/
-Pacific BMW,CA,76837,(818) 246-5600,800 S Brand Blvd,Glendale,91204,34.1374063376307, -118.25449738828127,https://www.pacificbmw.com/
-South Bay BMW,CA,41903,(310) 939-7300,18800 Hawthorne Blvd,Torrance,90504,33.86052563873095, -118.35117301158098,https://www.southbaybmw.com/
-Winslow BMW of Colorado Springs,CO,16418,(719) 473-1373,730 N Circle Dr,Colorado Springs,80909,38.91316641124938, -104.81452434574187,https://www.winslowbmw.com/
+name,state,country,dealer_code,phone,street,city,zip,lat,lng,url
+BMW of Anchorage,U.S,AK,28786,(877) 583-5028,"6115 Old Seward Hwy","Anchorage","99518",61.217330720098374, -149.86966354806648,https://www.bmwofanchorage.com
+BMW of Montgomery,U.S,AL,731 Eastern Boulevard,Montgomery,36117,(800) 996-9705,32.369454491074386, -86.20875043241435,https://www.bmwofmontgomery.com/
+BMW of Birmingham,U.S,AL,1000 Tom Williams Way,Irondale,35210,(205) 443-8698,33.5222139818395, -86.66341031702339,https://www.birminghambmw.com/
+Century BMW of Huntsville,U.S,AL,3810 University Dr NW,Huntsville,35816,(256) 536-3800,34.735790238296794, -86.62561324437355,https://www.centurybmwhuntsville.com/
+BMW of Tuscaloosa,U.S,AL,3537 Skyland Blvd E,Tuscaloosa,35405,(205) 345-9811,33.16921958691988, -87.4909135170378,https://www.bmwoftuscaloosa.com/
+BMW of Mobile,U.S,AL,3025 Government Boulevard,Mobile,36606,(251) 476-2550,30.65554772297209, -88.11512886316984,https://www.bmwofmobile.com/
+BMW of Little Rock,U.S,AR,4621 Colonel Glenn Plaza Dr,Little Rock,72210,(501) 224-3200,34.7135525725245, -92.40469425930152,https://www.bmwoflittlerock.com/
+BMW of Northwest Arkansas,U.S,AR,31833,(888) 571-7341,2500 SE Moberly Ln,Bentonville,72712,36.34590309020861, -94.18444784232776,https://www.bmwofnwa.com/
+BMW Tucson,U.S,AZ,32082,(520) 549-2167,855 W Wetmore Rd,Tucson,85705,32.28589686893269, -110.98611759194274,https://www.bmwoftucson.com/
+Chapman BMW Chandler,U.S,AZ,10729,(480) 344-4269,7455 W Orchid Ln,Chandler,85226,33.32273367166705, -111.97103550353992,https://www.chapmanbmwchandler.com/
+Chapman BMW On Camelback,U.S,AZ,10729,(602) 308-4269,1127 E Camelback Rd,Phoenix,85014,33.51047883881075, -112.0622634188768,https://www.chapmanbmwoncamelback.com/
+Arrowhead BMW,U.S,AZ,46886,(833) 700-1269,19205 N Loop 101 Frontage Rd,Glendale,85308,33.65901633694175, -112.23400127283719,https://www.arrowheadbmw.com/
+BMW North Scottsdale,U.S,AZ,20741,(877) 705-3224,18018 N Scottsdale Rd,Phoenix,85054,33.649116734742876, -111.92643564770707,https://www.bmwnorthscottsdale.com/
+Irvine BMW,U.S,CA,21188,(949) 649-8787,9881 Research Dr,Irvine,92618,33.63165793337103, -117.72569990352727,https://www.irvinebmw.com/
+BMW of Ontario,U.S,CA,34821,(909) 390-7888,1350 Auto Center Dr,Ontario,91761,34.04937539877247, -117.5458665151488,https://www.bmwofontario.com/
+BMW of Riverside,U.S,CA,40335,(951) 373-5000,3060 Adams St,Riverside,92504,33.923328733904654, -117.41690484399014,https://www.bmwofriverside.com/
+BMW Encinitas,U.S,CA,30956,(760) 753-6301,1302 Encinitas Blvd,Encinitas,92024,33.04657676205459, -117.26326051267236,https://www.autonation.com/
+BMW of Vista,U.S,CA,44610,(760) 305-5770,1715 Hacienda Dr,Vista,92081,33.179291,-117.239685,
+BMW of San Diego,U.S,CA,24335,(858) 560-5050,5090 Kearny Mesa Rd,San Diego,92111,32.82852762822794, -117.1441663900683,https://www.bmwofsandiego.com/
+BMW of Murrieta,U.S,CA,35744,(951) 249-8000,41430 Auto Mall Pkwy,Murrieta,92562,33.52945379392777, -117.17041885935082,https://www.bmwofmurrieta.com/
+BMW of Escondido,U.S,CA,51458,(760) 745-3000,1557 Auto Park Way N,Escondido,92029,33.11647551143201, -117.10923544402318,https://www.bmwofescondido.com/
+BMW of El Cajon,U.S,CA,32467,(619) 442-8888,720 El Cajon Blvd,El Cajon,92020,32.78791382301965, -116.97584937472548,https://www.bmwofelcajon.com/
+BMW of Palm Springs,U.S,CA,44427,(760) 324-7071,"3737 E Palm Canyon Dr","Palm Springs","92264-5205",33.795187209402485, -116.50444440352042,https://www.bmwofpalmsprings.com
+BMW of Humboldt Bay,U.S,CA,29869,(707) 839-4269,1795 Central Ave,McKinleyville,95519,40.938070781067594, -124.10015247436247,https://www.bmwofhumboldtbay.com/
+BMW of Visalia,U.S,CA,86335,(559) 732-4700,3365 N Demaree St,Visalia,93291,36.32979977009315, -119.39576990155952,https://www.bmwofvisalia.com/
+BMW Concord,U.S,CA,4497,(925) 682-3577,1967 Market St,Concord,37.97545786226334, -122.0445701051912,https://www.bmwconcord.com/
+Hansel BMW of Santa Rosa,U.S,CA,23779,(707) 578-4717,2925 Corby Ave,Santa Rosa,95407,38.40647244888878, -122.71705850146589,https://www.hanselbmwofsantarosa.com/
+Valley BMW,U.S,CA,21616,(209) 575-0269,4725 McHenry Ave,Modesto,95356,37.70840210703153, -120.99595597451457,https://www.valley-bmw.com/
+Crevier BMW,U.S,CA,36721,(657) 231-5040,1500 Auto Mall Dr,Santa Ana,92705,33.72793981035908, -117.83784750352335,https://www.crevierbmw.com/
+Niello BMW Sacramento,U.S,CA,4618,(916) 486-1011,2020 Fulton Ave,Sacramento,95825,38.60215318592758, -121.40073041680132,https://bmw.niello.com/
+BMW of Roseville,U.S,CA,4923,(916) 790-1990,110 Automall Dr,Roseville,95661,38.75151138315041, -121.25553794933603,https://www.bmwofroseville.com/
+BMW of Chico,U.S,CA,42367,(530) 893-1300,2520 Cohasset Rd,Chico,95973,39.78743735761354, -121.88943105722066,https://www.bmwofchico.com/
+BMW Fresno,U.S,CA,39315,(559) 447-6700,7171 N Palm Ave,Fresno,93650,36.8404007456713, -119.80893820165815,https://www.bmwfresno.com/
+Sterling BMW Newport Beach,U.S,CA,86513,(949) 645-5900,3000 W Coast Hwy,Newport Beach,92663,33.62148758414649, -117.92588604782276,https://www.sterlingbmw.com/
+BMW of Fairfield,U.S,CA,47859,(707) 402-1599,2855 Auto Mall Pkwy,Fairfield,94533,38.259079,-122.060402,https://www.bmwfairfield.com/
+BMW of Monrovia,U.S,CA,31642,(626) 358-4269,1425 S Mountain Ave,Monrovia,91016,34.1373576833138, -117.98693514232885,https://www.bmwofmonrovia.net/
+Valencia BMW,U.S,CA,22180,(661) 254-8000,23435 Valencia Blvd,Valencia,91355,34.42107787993354, -118.54889998826944,https://www.valenciabmw.com/
+Bob Smith BMW,U.S,CA,4637,(818) 346-3144,24500 Calabasas Rd,Calabasas,91302,34.14956293058092, -118.66127135944511,https://bobsmithbmw.com/
+Rusnak BMW,U.S,CA,86846,(805) 496-6500,3645 Auto Mall Dr,Thousand Oaks,91362,34.16299627844229, -118.83108719012922,https://www.rusnakbmw.com/
+BMW of Camarillo/Steve Thomas BMW,U.S,CA,17990,(805) 482-8878,411 Daily Dr,Camarillo,93010,34.2199741604052, -119.06433279012693,https://www.bmwofcamarillo.com/
+BMW of Bakersfield,U.S,CA,24781,(661) 396-4040,5400 Gasoline Alley Dr,Bakersfield,93313,35.30482733536447, -119.03430091534234,https://www.bmwofbakersfield.com/
+BMW Santa Barbara,U.S,CA,26718,(805) 682-2000,402 S Hope Ave,Santa Barbara,93105,34.43410059792072, -119.74622788826882,https://www.bmwsantabarbara.com/
+BMW of Santa Maria,U.S,CA,65734,(805) 614-0306,2150 S College Dr,Santa Maria,93455,34.92198402673174, -120.42429241153665,https://www.bmwsm.com/
+BMW of San Luis Obispo,U.S,CA,22820,(805) 543-4423,1401 Calle Joaquin,San Luis Obispo,35.2513717481605, -120.67963673850916,https://www.bmwofslo.com/
+Santa Monica BMW,U.S,CA,4660,(310) 829-3535,1127 Santa Monica Blvd,Santa Monica,90401,34.02285740986545, -118.48814221712155,https://www.smbmw.com/
+BMW of San Francisco,U.S,CA,49544,(415) 551-2639,1675 Howard St,San Francisco,94103,37.770845168757226, -122.41685008997231,https://www.bmwsf.com/
+East Bay BMW,U.S,CA,10731,(888) 593-7018,4350 Rosewood Dr,Pleasanton,94588,37.69987556169144, -121.8765199727842,https://www.eastbaybmw.com/
+BMW of Buena Park,U.S,CA,47046,(714) 598-3738,6750 Auto Center Dr,Buena Park,90621,33.8623401902663, -117.98857882082642,https://www.bmwbuenapark.com/
+BMW of Fremont,U.S,CA,24856,(510) 224-4820,5720 Cushing Pkwy,Fremont,94538,37.499015697760605, -121.97527238813554,https://www.bmwoffremont.com/
+BMW of Mountain View,U.S,CA,21618,(650) 943-1000,150 E El Camino Real,Mountain View,94040,37.3808633814288, -122.0715093746477,https://www.bmwofmountainview.com/
+Peter Pan BMW,U.S,CA,32652,(650) 349-9077,1625 Adrian Rd,Burlingame,94010,37.543405949364136, -122.30301281512007,https://www.peterpanbmw.com/
+Weatherford BMW of Berkley,U.S,CA,4514,(510) 654-8280,735 Ashby Ave,Berkeley,94710,37.8505247766516, -122.29448794394169,https://www.weatherfordbmw.com/
+BMW of San Rafael,U.S,CA,42869,(415) 482-2000,1599 Francisco Blvd E,San Rafael,94901,37.95146773278675, -122.49470943044389,https://www.bmwofsanrafael.com/
+Stevens Creek BMW,U.S,CA,22083,(408) 249-9070,4343 Stevens Creek Blvd,Santa Clara,95051,37.32419819443075, -121.97806666300612,https://www.stevenscreekbmw.com/
+BMW of Sherman Oaks,U.S,CA,47724,(818) 907-9995,5201 Van Nuys Blvd,Sherman Oaks,91401,34.165509972626154, -118.44925594834982,https://www.bmwshermanoaks.com/
+BMW of Monterey,U.S,CA,30822,(866) 299-5459,1 Geary Plaza,Seaside,93955,36.61455958253676, -121.84321765564117,https://www.bmwmonterey.com/
+Century West BMW,U.S,CA,20268,(818) 432-5800,4245 Lankershim Blvd,North Hollywood,91602,34.14719519825643, -118.36418916129449,https://www.centurywestbmw.com/
+McKenna BMW Norwalk,U.S,CA,96733,(562) 868-3233,10900 Firestone Blvd,Norwalk,90650,33.92311889975542, -118.10221695945454,https://www.mckennabmw.com/
+New Century BMW,U.S,CA,17966,(626) 570-8444,1139 W Main St,Alhambra,91801,34.09190867278375, -118.1349813766391,https://www.newcenturybmw.com/
+Long Beach BMW,U.S,CA,31643,(562) 427-5494,1660 E Spring St,Signal Hill,90755,33.811097445393294, -118.17094590548629,https://www.longbeachbmw.com/
+BMW of Downtown Los Angeles/Nick Alexander Imports,U.S,CA,4942,(323) 583-1901,6333 S Alameda St,Los Angeles,90001,33.98264949119104, -118.23662675205568,https://www.bmwdtla.com/
+BMW of San Francisco,U.S,CA,49544,(628) 221-7930,1675 Howard St,San Francisco,94103,37.77080276480308, -122.41675353045204,https://www.bmwsf.com/
+Beverly Hills BMW,U.S,CA,21390,(310) 358-7800,5070 Wilshire Blvd,Los Angeles,90036,34.06205453544053, -118.34009806129791,https://www.bmwofbeverlyhills.com/
+Pacific BMW,U.S,CA,76837,(818) 246-5600,800 S Brand Blvd,Glendale,91204,34.1374063376307, -118.25449738828127,https://www.pacificbmw.com/
+South Bay BMW,U.S,CA,41903,(310) 939-7300,18800 Hawthorne Blvd,Torrance,90504,33.86052563873095, -118.35117301158098,https://www.southbaybmw.com/
+Winslow BMW of Colorado Springs,U.S,CO,16418,(719) 473-1373,730 N Circle Dr,Colorado Springs,80909,38.91316641124938, -104.81452434574187,https://www.winslowbmw.com/
 Schomp BMW of Highlands Ranch,CO,5042,(303) 471-3772,1190 Plum Valley Ln,Highlands Ranch,80129,39.56045765745208, -105.0017875518084,https://schompbmw.com/
 BMW of Denver Downtown,CO,39314,(303) 759-4646,1040 S Colorado Blvd,Denver,80246,39.69775905761017, -104.93958868661126,https://www.bmwofdenverdowntown.com/
 Gebhardt BMW,CO,5080,(720) 974-1000,4740 Valmont Rd,Boulder,80301,40.02858614737195, -105.242300790306,https://www.gebhardtbmw.com/
