@@ -1,7 +1,7 @@
 name,country,state,dealer_code,phone,street,city,zip,lat,lng,url
 BMW of Anchorage,U.S,AK,28786,(877) 583-5028,"6115 Old Seward Hwy","Anchorage","99518-1804",61.217330720098374, -149.86966354806648,https://www.bmwofanchorage.com
 BMW of Montgomery,U.S,AL,xxxx,(800) 996-9705,731 Eastern Boulevard,Montgomery,36117-1998,32.369454491074386, -86.20875043241435,https://www.bmwofmontgomery.com/
-BMW of Birmingham,U.S,AL,xxxx,(205) 443-8698,1000 Tom Williams Way,Irondale,35210-3451,33.5222139818395, -86.66341031702339,https://www.birminghambmw.com/
+BMW of Birmingham,U.S,AL,21851,(205) 443-8698,1000 Tom Williams Way,Irondale,35210-3451,33.5222139818395, -86.66341031702339,https://www.birminghambmw.com/
 Century BMW of Huntsville,U.S,AL,xxxx,(256) 536-3800,3810 University Dr NW,Huntsville,35816-3142,34.735790238296794, -86.62561324437355,https://www.centurybmwhuntsville.com/
 BMW of Tuscaloosa,U.S,AL,xxxx,(205) 345-9811,3537 Skyland Blvd E,Tuscaloosa,35405-4557,33.16921958691988, -87.4909135170378,https://www.bmwoftuscaloosa.com/
 BMW of Mobile,U.S,AL,xxxx,(251) 476-2550,3025 Government Boulevard,Mobile,36606-2610,30.65554772297209, -88.11512886316984,https://www.bmwofmobile.com/
@@ -98,7 +98,7 @@ Braman BMW Miami,U.S,FL,20626,(305) 571-1200,2060 Biscayne Blvd,Miami,33137,25.7
 Braman BMW West Palm Beach,U.S,FL,33409,(561) 609-0120,2901 Okeechobee Blvd, West Palm Beach,33137,25.796799796777353, -80.18946343318397,https://www.bramanbmwwpb.com/
 Lauderdale BMW of Pembroke Pines,U.S,FL,75784,(954) 620-5050,14800 Sheridan St,Pembroke Pines,33331,26.028597127833883, -80.34570349160987,https://www.bmwofpembrokepines.com/
 BMW of Fort Lauderdale,U.S,FL,75784,(954) 527-3800,1441 S Federal Hwy,Fort Lauderdale,33316,26.103355136544533, -80.13726531990771,https://www.bmwoffortlauderdale.com/
-BMW of Coconut Creek,U.S,FL,xxxx,(877) 340-5841,4401 W Sample Rd,Coconut Creek,33073,26.275639602908495, -80.18430763948169,https://www.bmwofcoconutcreek.com/
+BMW of Coconut Creek,U.S,FL,46697,(877) 340-5841,4401 W Sample Rd,Coconut Creek,33073,26.275639602908495, -80.18430763948169,https://www.bmwofcoconutcreek.com/
 Germain BMW of Naples,U.S,FL,xxxx, (239) 643-2220,11286 Tamiami Trl N, Naples,34110,26.276761970645197, -81.80103763614662,https://www.germainbmw.com/
 Germain BMW South,U.S,FL,xxxx, (239) 389-7009,3707 Davis Blvd, Naples,34104,26.13922965302259, -81.76294599042397,https://www.germainbmwsouth.com/
 BMW of Fort Myers,U.S,FL,22081,(239) 433-8378,15421 S Tamiami Trail,Fort Myers,33908,26.520006075797507, -81.86708290454801,https://www.bmwoffortmyers.com/
@@ -370,10 +370,10 @@ Moses BMW,U.S,WV,15673,(304) 722-4900,401 Maccorkle Ave,South Charleston,25309,3
 CANADA
 Birchwood BMW,Canada,MB,XXXX,(204) 452-7799,45-3965 Portage Ave,Winnipeg,R3K 2H4,49.882400,-97.318600,https://www.birchwoodbmw.ca/
 Waterloo BMW,Canada,ON,XXXX,(519) 747-0269,583 Colby Dr,Waterloo,N2V 1A1,43.494700,-80.547600,https://www.bmwofwaterloo.ca/
-BMW Langley,Canada,BC,XXXX,(604) 533-0269,6025 Collection Dr,Langley,V3A 0C2,49.114900,-122.644900,https://www.bmwlangley.ca/
-Otto's BMW,Canada,ON,XXXX,(613) 725-3048,660 Hunt Club Rd,Ottawa,K1V 1C1,45.346800,-75.663500,https://www.bmwottawa.ca/
-Maranello BMW,Canada,ON,XXXX,(416) 213-5699,55 Auto Park Circle,Vaughan,L4L 8R1,43.790000,-79.592000,https://www.maranellobmw.com/
-BMW Autohaus,Canada,ON,XXXX,(905) 886-3380,480 Steeles Ave W,Thornhill,L4J 1A2,43.807600,-79.451800,https://www.bmwautohaus.ca/
+BMW Langley,Canada,BC,35892,(604) 533-0269,6025 Collection Dr,Langley,V3A 0C2,49.114900,-122.644900,https://www.bmwlangley.ca/
+Otto's BMW,Canada,ON,09263,(613) 725-3048,660 Hunt Club Rd,Ottawa,K1V 1C1,45.346800,-75.663500,https://www.bmwottawa.ca/
+Maranello BMW,Canada,ON,88336,(416) 213-5699,55 Auto Park Circle,Vaughan,L4L 8R1,43.790000,-79.592000,https://www.maranellobmw.com/
+BMW Autohaus,Canada,ON,20459,(905) 886-3380,480 Steeles Ave W,Thornhill,L4J 1A2,43.807600,-79.451800,https://www.bmwautohaus.ca/
 Moto Internationale,Canada,QC,XXXX,(514) 483-6686,1390 Rue Rachel E,Montréal,H2J 2K2,45.464700,-73.603300,https://www.motointernationale.ca/
 Georgian BMW / Mini,Canada,ON,XXXX,(705) 797-4200,220 Essa Rd,Barrie,L4N 9J3,44.375300,-79.695200,https://www.georgianbmw.ca/
 BMW Ville de Québec,Canada,QC,XXXX,(418) 681-5000,215 Rue Etienne Dubreuil,Québec City,G1M 3N2,46.772500,-71.285300,https://www.bmwquebec.com/
